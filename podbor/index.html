@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Подбор до трёх специалистов или площадок для мероприятия с объяснением каждого выбора. Сравнение дат, точные причины отказа и исходные данные каталога.">
+  <title>Подбор — специалисты и площадки для мероприятий</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232948df'/%3E%3Cpath d='m9 16 5 5 9-11' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+
+  <!-- Шрифт -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap&subset=cyrillic" rel="stylesheet">
+
+  <!-- Стили: порядок подключения важен -->
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/app-refine.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/theme-images.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Подбор — главная"><span class="brand-mark" aria-hidden="true">i</span>irikteu<span class="brand-dot">.</span></a>
+    <span class="header-note">ДЛЯ ВАШЕГО МЕРОПРИЯТИЯ</span>
+    <a class="method-link" href="#method">Как работает подбор</a>
+  </header>
+  <main class="workspace">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">ПОНЯТНЫЙ ВЫБОР НА ОСНОВЕ ДАННЫХ</p><h1 id="page-title">Ваше событие. Подходящая команда.</h1><p class="intro-copy">Специалисты и площадки для вашего мероприятия. До трёх вариантов с объяснением выбора.</p></div>
+      <div class="catalog-stat"><strong id="catalog-total">66</strong><span>профилей<br><b id="category-total">17</b> категорий</span></div>
+    </section>
+    <section class="demo-strip" aria-label="Примеры запросов на реальных данных"><span class="demo-label">ПРОВЕРЬТЕ НА ПРИМЕРЕ</span><div class="demo-buttons"><button type="button" data-example="dense" class="selected" disabled>Популярная категория</button><button type="button" data-example="rare" disabled>Редкая услуга</button><button type="button" data-example="busy" disabled>Все заняты</button><button type="button" data-example="absent" disabled>Категории нет</button><button type="button" data-example="budget" disabled>Маленький бюджет</button></div></section>
+    <div class="layout">
+      <aside class="search-panel">
+        <div class="panel-heading"><span class="section-number">01</span><h2>Ваше мероприятие</h2></div>
+        <form id="search-form">
+          <fieldset id="fields" disabled>
+            <label for="city">Город</label><select id="city" name="city" required></select>
+            <label for="date">Дата мероприятия</label><input id="date" name="date" type="date" min="2026-09-23" max="2026-12-31" value="2026-09-23" required aria-describedby="date-help"><p class="field-help" id="date-help">Календарь: 23.09.2026–31.12.2026</p>
+            <label for="event">Тип мероприятия</label><select id="event" name="event" required></select>
+            <label for="category">Специалист или площадка</label><select id="category" name="category" required></select>
+            <label for="budget">Бюджет <span class="label-unit">тенге</span></label><input id="budget" name="budget" type="number" min="0" max="9007199254740991" step="1" inputmode="numeric" value="2000000" required aria-describedby="budget-help"><p class="field-help" id="budget-help">Сравнивается с начальной ценой в каталоге.</p>
+            <div class="optional-heading">Дополнительные условия <span>Необязательно</span></div>
+            <div class="optional-grid"><div><label for="language">Язык работы</label><select id="language" name="language"><option value="">Любой язык</option></select></div><div><label for="hours">Длительность, ч</label><input id="hours" name="hours" type="number" min="0.1" step="any" inputmode="decimal" placeholder="Например, 6"></div></div>
+            <button class="search-button" id="submit-button" type="submit">Подобрать варианты <span aria-hidden="true">→</span></button>
+          </fieldset>
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+        </form>
+        <div class="form-footnote"><span class="note-icon" aria-hidden="true">i</span><p>Поиск выполняется в вашем браузере. Регистрация и ключ API не нужны.</p></div>
+      </aside>
+      <section class="results-panel" aria-labelledby="results-label">
+        <div class="results-heading"><div class="panel-heading"><span class="section-number">02</span><h2 id="results-label">Ваша подборка</h2></div><span class="sort-note">Начальная цена ↑ <span>·</span> при равенстве — id</span></div>
+        <div id="results" aria-live="polite" aria-busy="true"><div class="empty-state">Читаем встроенный каталог…</div></div>
+        <div id="result-tools" class="result-tools" hidden><button id="compare-toggle" type="button" aria-expanded="false" aria-controls="compare-panel">Сравнить с другой датой <span aria-hidden="true">↔</span></button><button id="repeat-check" type="button">Проверить повторяемость</button><p id="repeat-status" role="status"></p></div>
+        <section id="compare-panel" class="compare-panel" hidden aria-labelledby="compare-heading"><div class="comparison-heading"><div><p class="eyebrow">ТО ЖЕ СОБЫТИЕ. ДРУГОЙ ДЕНЬ.</p><h3 id="compare-heading">Что изменится при смене даты?</h3></div><div><label for="compare-date">Дата для сравнения</label><input type="date" id="compare-date" min="2026-09-23" max="2026-12-31" value="2026-09-24" required></div></div><div id="comparison-output" aria-live="polite"></div></section>
+        <div class="data-note"><span class="note-icon" aria-hidden="true">i</span><p>Указаны начальные цены, а не окончательные предложения. Отсутствие отметки о занятости не подтверждает бронирование. Имена анонимизированы и сохранены как в исходном каталоге.</p></div>
+      </section>
+    </div>
+    <section id="method" class="method-section" aria-labelledby="method-title"><div class="method-intro"><p class="eyebrow">КАЖДЫЙ ВЫБОР МОЖНО ПРОВЕРИТЬ</p><h2 id="method-title">Подборка с понятными причинами.</h2><p>Все профили проходят одинаковые проверки. Цены, свободные даты и достижения не придумываются.</p></div><div class="method-grid"><div><span>01 / ПРОВЕРКА</span><h3>Учитываем каждое условие.</h3><p>Город, категория, занятость, бюджет, тип события, выбранный язык и длительность. Пустой лимит длительности означает, что время на площадке не применяется.</p></div><div><span>02 / ПОРЯДОК</span><h3>Сохраняем стабильный результат.</h3><p>Подходящие профили сортируются по начальной цене, затем по id. Показываются первые три. Одинаковый запрос всегда возвращает тот же порядок.</p></div><div><span>03 / ОБЪЯСНЕНИЕ</span><h3>Показываем факты из каталога.</h3><p>В каждом объяснении есть особенность профиля и проверенные условия. Внешний ИИ не используется. Подбор полностью работает без интернета.</p></div></div></section>
+    <section class="transparency" aria-labelledby="transparency-title"><h2 id="transparency-title">Открыто говорим о качестве данных.</h2><div class="flag-legend"><p><code>synthetic</code><span>Профиль искусственно создан для набора данных.</span></p><p><code>city_imputed</code><span>Город заполнен при подготовке набора данных.</span></p><p><code>price_imputed</code><span>Цена заполнена при подготовке набора данных.</span></p></div><p class="legend-summary" id="flag-summary">Все три признака указаны на каждой карточке.</p></section>
+  </main>
+  <footer><span><strong>irikteu.</strong> Для HackAlem · 2026</span><span>Только рекомендации. Без бронирования и оплаты.</span></footer>
+
+  <!-- Данные -->
+  <script src="data/catalog.js"></script>
+
+  <!-- Логика подбора (Участник 1) -->
+  <script src="js/core/format.js"></script>
+  <script src="js/core/validation.js"></script>
+  <script src="js/core/matcher.js"></script>
+
+  <!-- Интерфейс (Участник 2) -->
+  <script src="js/ui/dom.js"></script>
+  <script src="js/ui/results-view.js"></script>
+  <script src="js/ui/compare-view.js"></script>
+  <script src="js/ui/demos.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Анимации и эффекты (Участник 3) -->
+  <script src="js/fx/effects.js"></script>
+</body>
+</html>
