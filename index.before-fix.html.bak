@@ -1,0 +1,6661 @@
+<!doctype html>
+
+<!--
+  ІРІКТЕУ — БІР ФАЙЛДЫҚ ТОЛЫҚ ВЕБ-ҚОСЫМША
+
+  Өңдеу: VS Code → File → Open File… → осы index.html файлын таңдаңыз.
+  Іске қосу: файлды Safari немесе Chrome браузерінде ашыңыз.
+  Live Server, Terminal, Python, npm, интернет және Серверсіз жұмыс істейді.
+
+  Бөлімдер:
+  1. Көрініс (CSS) — <style> ішінде.
+  2. Қазақша интерфейс (HTML) — <body>
+  <!-- 2. ҚАЗАҚША ИНТЕРФЕЙС: HTML --> ішінде.
+  3. Нақты CSV деректері және түсіндірме дәлелдері — catalog-data блогында.
+  4. Іріктеу мен карточкаларды көрсету (JavaScript) — соңғы <script> ішінде.
+
+  66 профиль бастапқы CSV-ден өзгеріссіз түрлендірілген көшірме ретінде енгізілді.
+  CSV кейін өзгерсе, осы файлдағы дерек көшірмесін бөлек жаңарту керек.
+  Реттілік: бастапқы баға өсуімен, тең болса id өсуімен; ең көбі 3 карточка.
+  max_hours=null — ұзақтық қолданылмайды; busy_dates күндері ұсынылмайды.
+  AI қолданылмайды. Жеке кілттер жоқ. Барлық есеп браузер ішінде орындалады.
+-->
+
+<html lang="kk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Іс-шараға маман немесе орын таңдаңыз. Нақты каталог, түсінікті себептер, ең көбі үш сәйкес профиль.">
+  <title>Іріктеу — іс-шараңызға лайық профильдер</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232645ed'/%3E%3Cpath d='m9 16 5 5 9-11' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <!-- 1. КӨРІНІС: CSS -->
+  <style>
+:root {
+  --ink:#172236;
+  --muted:#5b6578;
+  --blue:#2948df;
+  --line:#e0e5ee;
+  --paper:#fff;
+  --bg:#f4f6fa;
+  --soft:#edf1ff;
+  --amber:#815616;
+  --green:#176343;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  font-size:16px;
+  font-synthesis:none;
+}
+* {
+  box-sizing:border-box;
+}
+body {
+  margin:0;
+}
+button,input,select {
+  font:inherit;
+}
+button,a,input,select {
+  -webkit-tap-highlight-color:transparent;
+}
+button {
+  cursor:pointer;
+}
+a {
+  color:inherit;
+}
+button:disabled {
+  cursor:wait;
+  opacity:.6;
+}
+[hidden] {
+  display:none!important;
+}
+:focus-visible {
+  outline:3px solid #6783ff;
+  outline-offset:3px;
+}
+.topbar {
+  min-height:86px;
+  padding:18px max(32px,calc((100vw - 1300px)/2));
+  display:flex;
+  align-items:center;
+  gap:40px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  text-decoration:none;
+  font-size:27px;
+  font-weight:750;
+  letter-spacing:-1px;
+}
+.brand-mark {
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:var(--blue);
+  color:white;
+  width:35px;
+  height:35px;
+  font-size:28px;
+  font-weight:650;
+  letter-spacing:0;
+}
+.brand-dot {
+  margin-left:-9px;
+  color:var(--blue);
+}
+.header-note {
+  font-size:14px;
+  color:var(--muted);
+}
+.divider {
+  margin:0 12px;
+  color:#a8b0c1;
+}
+.mode {
+  margin-left:auto;
+  padding:8px 11px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  color:var(--muted);
+  font-size:13px;
+}
+.workspace {
+  max-width:1364px;
+  margin:0 auto;
+  padding:40px 32px 0;
+}
+.intro {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:24px;
+  margin-bottom:32px;
+}
+.eyebrow {
+  font-size:12px;
+  font-weight:750;
+  letter-spacing:1.7px;
+  color:var(--blue);
+  margin:0 0 11px;
+}
+h1 {
+  font-size:clamp(27px,3vw,38px);
+  letter-spacing:-1.15px;
+  line-height:1.2;
+  margin:0 0 12px;
+  font-weight:730;
+}
+.intro-copy {
+  color:var(--muted);
+  margin:0;
+  line-height:1.55;
+}
+.catalog-stat {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding-left:30px;
+  border-left:1px solid #d3dbea;
+  flex-shrink:0;
+}
+.catalog-stat strong {
+  font-size:48px;
+  font-weight:500;
+  letter-spacing:-2px;
+}
+.catalog-stat span {
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+.layout {
+  display:grid;
+  grid-template-columns:340px minmax(0,1fr);
+  gap:28px;
+  align-items:start;
+}
+.search-panel {
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:24px;
+  box-shadow:0 3px 12px #18275604;
+}
+.panel-heading {
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.panel-heading h2 {
+  font-size:17px;
+  margin:0;
+  font-weight:680;
+}
+.section-number {
+  font-size:12px;
+  font-variant-numeric:tabular-nums;
+  font-weight:650;
+  color:var(--blue);
+  background:var(--soft);
+  border-radius:5px;
+  padding:5px 6px;
+}
+.search-panel .panel-heading {
+  margin-bottom:24px;
+}
+fieldset {
+  border:0;
+  padding:0;
+  margin:0;
+  min-width:0;
+}
+label {
+  display:block;
+  font-size:14px;
+  font-weight:580;
+  margin:18px 0 8px;
+}
+fieldset>label:first-child {
+  margin-top:0;
+}
+input,select {
+  width:100%;
+  height:45px;
+  background:#fff;
+  color:var(--ink);
+  border:1px solid #ccd3df;
+  border-radius:6px;
+  padding:10px 12px;
+  min-width:0;
+  transition:border-color .15s;
+}
+select {
+  padding-right:24px;
+}
+input:hover,select:hover {
+  border-color:#8996b0;
+}
+input:focus,select:focus {
+  border-color:var(--blue);
+}
+input::placeholder {
+  color:#737d91;
+}
+.field-help {
+  font-size:12px;
+  line-height:1.5;
+  color:var(--muted);
+  margin:7px 0 0;
+}
+.optional-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-weight:650;
+  font-size:14px;
+  margin:24px 0 0;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+  gap:6px;
+}
+.optional-heading span {
+  font-size:12px;
+  font-weight:400;
+  color:var(--muted);
+}
+.optional-grid {
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  gap:12px;
+}
+.optional-grid label {
+  font-size:13px;
+}
+.optional-grid select,.optional-grid input {
+  font-size:14px;
+  padding-left:8px;
+}
+.search-button {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  background:var(--blue);
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  border:0;
+  border-radius:7px;
+  padding:16px 13px;
+  width:100%;
+  margin-top:23px;
+  transition:background .15s;
+}
+.search-button:hover {
+  background:#1834c4;
+}
+.search-button span {
+  font-size:21px;
+  line-height:1;
+}
+.examples {
+  margin-top:24px;
+  padding-top:19px;
+  border-top:1px solid var(--line);
+}
+.examples p {
+  font-size:12px;
+  color:var(--muted);
+  margin:0 0 10px;
+}
+.example-buttons {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.example-buttons button {
+  background:#fff;
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:12px;
+  border-radius:5px;
+  padding:8px;
+}
+.example-buttons button:hover {
+  color:var(--blue);
+  border-color:var(--blue);
+}
+.results-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin:8px 0 21px;
+}
+.sort-note {
+  font-size:12px;
+  color:var(--muted);
+}
+.sort-note span {
+  margin:0 4px;
+}
+.result-summary {
+  margin-bottom:20px;
+}
+.status-line {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-bottom:9px;
+}
+.status-badge {
+  font-size:12px;
+  background:#e4f2ea;
+  color:var(--green);
+  padding:4px 7px;
+  border-radius:4px;
+  font-weight:650;
+  white-space:nowrap;
+}
+.status-line h3 {
+  font-size:19px;
+  margin:0;
+  line-height:1.4;
+}
+.summary-text {
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+  margin:0;
+}
+.query-tags {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:12px;
+}
+.query-tag {
+  border:1px solid #dce2ee;
+  border-radius:5px;
+  padding:5px 8px;
+  font-size:12px;
+  color:#4b566c;
+  background:#fafbfe;
+}
+.cards {
+  display:grid;
+  gap:14px;
+}
+.profile-card {
+  position:relative;
+  padding:22px 24px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:0 2px 7px #18275603;
+}
+.profile-card:first-child {
+  border-left:3px solid var(--blue);
+  padding-left:22px;
+}
+.card-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+}
+.profile-identity {
+  display:flex;
+  align-items:flex-start;
+  gap:13px;
+  min-width:0;
+}
+.rank {
+  color:var(--blue);
+  font-size:14px;
+  font-weight:650;
+  background:var(--soft);
+  min-width:36px;
+  height:36px;
+  border-radius:7px;
+  display:grid;
+  place-items:center;
+  font-variant-numeric:tabular-nums;
+}
+.profile-card h3 {
+  font-size:19px;
+  margin:0 0 6px;
+  line-height:1.35;
+  font-weight:650;
+}
+.profile-meta {
+  font-size:13px;
+  line-height:1.5;
+  color:var(--muted);
+  margin:0;
+}
+.price {
+  font-size:16px;
+  line-height:1.5;
+  text-align:right;
+  font-weight:650;
+  max-width:200px;
+  margin:0;
+  flex-shrink:0;
+}
+.price small {
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  font-weight:400;
+}
+.explanation {
+  line-height:1.65;
+  font-size:14px;
+  color:#35425a;
+  margin:19px 0 16px;
+  padding-left:13px;
+  border-left:2px solid #e0e6f9;
+}
+.card-attributes {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 16px;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+.flag-row {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  padding-top:13px;
+  border-top:1px solid #edf0f5;
+}
+.flag {
+  font-size:12px;
+  padding:4px 7px;
+  border:1px solid #e3e7ee;
+  border-radius:4px;
+  color:#616b7c;
+  background:#fbfcfe;
+}
+.flag.active {
+  background:#fff7e7;
+  border-color:#f0d7a7;
+  color:#795012;
+}
+.evidence {
+  margin-top:12px;
+  font-size:12px;
+  color:var(--muted);
+}
+summary {
+  cursor:pointer;
+  line-height:1.55;
+}
+summary:hover {
+  color:var(--blue);
+}
+blockquote {
+  margin:10px 0 0;
+  border-left:2px solid #d7dfee;
+  padding-left:12px;
+  line-height:1.65;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+}
+.diagnostics {
+  margin-top:18px;
+  border:1px solid #dce2ed;
+  border-radius:9px;
+  padding:18px 20px;
+  background:#f0f3f9;
+}
+.diagnostics h4 {
+  font-size:14px;
+  margin:0 0 12px;
+}
+.reason-list {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.reason-list li {
+  font-size:12px;
+  padding:7px 9px;
+  border:1px solid #dce2ed;
+  background:white;
+  border-radius:5px;
+}
+.reason-list strong {
+  margin-left:7px;
+  color:var(--blue);
+}
+.diagnostic-note {
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.55;
+  margin:12px 0 0;
+}
+.rejections {
+  font-size:13px;
+  margin-top:12px;
+}
+.rejections ul {
+  padding-left:18px;
+  line-height:1.7;
+}
+.rejections li {
+  margin-top:8px;
+}
+.rejection-id {
+  font-size:12px;
+  color:var(--muted);
+}
+.empty-state {
+  min-height:250px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+  background:white;
+  padding:32px;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+.empty-state .empty-icon {
+  color:var(--amber);
+  background:#fff4df;
+  padding:9px 12px;
+  border-radius:8px;
+  font-size:20px;
+  margin-bottom:14px;
+}
+.empty-state h3 {
+  margin:0 0 12px;
+  font-size:22px;
+  line-height:1.4;
+}
+.empty-state p {
+  margin:0;
+  line-height:1.7;
+  color:var(--muted);
+  font-size:15px;
+}
+.data-note {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+  margin:20px 2px;
+}
+.data-note p {
+  margin:0;
+}
+.note-icon {
+  border:1px solid #9ca9bf;
+  border-radius:50%;
+  width:17px;
+  height:17px;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+  flex-shrink:0;
+  margin-top:2px;
+}
+.transparency {
+  margin-top:36px;
+  border-top:1px solid #dce2ec;
+  padding:26px 0 22px;
+}
+.transparency h2 {
+  font-size:14px;
+  margin:0 0 18px;
+}
+.flag-legend {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:25px;
+}
+.flag-legend p {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin:0;
+}
+.flag-legend code {
+  font-size:12px;
+  color:#495a77;
+}
+.flag-legend span {
+  font-size:13px;
+  line-height:1.6;
+  color:var(--muted);
+}
+.legend-summary {
+  font-size:12px;
+  color:var(--muted);
+  margin:18px 0 0;
+}
+footer {
+  max-width:1364px;
+  padding:20px 32px 28px;
+  margin:0 auto;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:var(--muted);
+  font-size:12px;
+}
+.form-error {
+  padding:12px;
+  background:#fff0f0;
+  border:1px solid #f0c5c5;
+  border-radius:6px;
+  color:#982929;
+  font-size:14px;
+  line-height:1.5;
+}
+.retry-button {
+  margin-top:18px;
+  background:var(--blue);
+  color:white;
+  border:0;
+  border-radius:6px;
+  padding:11px 16px;
+}
+.dirty-state {
+  min-height:200px;
+}
+.empty-state:focus {
+  outline:none;
+}
+@media(min-width:1450px) {
+  .workspace {
+    padding-top:46px;
+  }
+}
+@media(max-width:1050px) {
+  .layout {
+    grid-template-columns:310px minmax(0,1fr);
+    gap:20px;
+  }
+  .search-panel {
+    padding:20px;
+  }
+  .card-top {
+    flex-direction:column;
+    gap:12px;
+  }
+  .price {
+    text-align:left;
+    max-width:none;
+    margin-left:49px;
+  }
+  .price small {
+    display:inline;
+    margin-left:6px;
+  }
+  .sort-note {
+    max-width:105px;
+    line-height:1.5;
+    text-align:right;
+  }
+  .header-note {
+    display:none;
+  }
+  .profile-card {
+    padding:20px;
+  }
+  .profile-card:first-child {
+    padding-left:18px;
+  }
+}
+@media(max-width:740px) {
+  .topbar {
+    padding:16px 20px;
+    min-height:73px;
+    gap:10px;
+  }
+  .mode {
+    font-size:12px;
+    padding:6px 8px;
+  }
+  .workspace {
+    padding:28px 18px 0;
+  }
+  .intro {
+    margin-bottom:26px;
+  }
+  .catalog-stat {
+    display:none;
+  }
+  h1 {
+    font-size:29px;
+    letter-spacing:-.7px;
+  }
+  .intro-copy {
+    font-size:15px;
+  }
+  .layout {
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  .search-panel {
+    padding:22px;
+  }
+  .results-heading {
+    margin-top:0;
+  }
+  .card-top {
+    flex-direction:row;
+  }
+  .price {
+    text-align:right;
+    margin-left:0;
+    max-width:145px;
+    font-size:14px;
+  }
+  .price small {
+    display:block;
+    margin-left:0;
+  }
+  .profile-card h3 {
+    font-size:17px;
+  }
+  .profile-identity {
+    gap:10px;
+  }
+  .rank {
+    min-width:29px;
+    height:29px;
+    font-size:12px;
+  }
+  .flag-legend {
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+  .flag-legend p {
+    gap:4px;
+  }
+  .transparency {
+    margin-top:28px;
+  }
+  .status-line {
+    align-items:flex-start;
+  }
+  .status-line h3 {
+    font-size:17px;
+  }
+  .status-badge {
+    margin-top:2px;
+  }
+  footer {
+    padding:20px 18px;
+    flex-direction:column;
+    gap:10px;
+  }
+}
+@media(max-width:420px) {
+  .card-top {
+    flex-direction:column;
+  }
+  .price {
+    text-align:left;
+    margin-left:39px;
+    max-width:none;
+  }
+  .price small {
+    display:inline;
+    margin-left:5px;
+  }
+  .profile-card {
+    padding:18px;
+  }
+  .profile-card:first-child {
+    padding-left:16px;
+  }
+  .sort-note {
+    font-size:12px;
+    max-width:90px;
+  }
+  .panel-heading h2 {
+    font-size:16px;
+  }
+  .mode {
+    max-width:123px;
+    text-align:center;
+  }
+  .explanation {
+    font-size:14px;
+  }
+  .flag {
+    font-size:12px;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  * {
+    transition:none!important;
+    scroll-behavior:auto!important;
+  }
+}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Іріктеу — басты бет"><span class="brand-mark" aria-hidden="true">і</span> іріктеу<span class="brand-dot">.</span></a>
+    <span class="header-note">HackAlem <span class="divider">/</span> Іс-шара каталогы</span>
+    <span class="mode">Серверсіз жұмыс істейді</span>
+  </header>
+  <main class="workspace">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">ДӘЛЕЛГЕ СҮЙЕНГЕН ТАҢДАУ</p><h1 id="page-title">Іс-шараңызға кім керек?</h1><p class="intro-copy">Шарттарыңызды көрсетіңіз. Каталогтан ең көбі 3 сәйкес профиль табамыз.</p></div>
+      <div class="catalog-stat"><strong id="catalog-total">—</strong><span>профиль<br>бір каталогта</span></div>
+    </section>
+    <div class="layout">
+      <aside class="search-panel">
+        <div class="panel-heading"><span class="section-number">01</span><h2>Іс-шара шарттары</h2></div>
+        <form id="search-form">
+          <fieldset id="fields" disabled>
+            <label for="city">Қала</label><select id="city" name="city" required></select>
+            <label for="date">Іс-шара күні</label><input id="date" name="date" type="date" min="2026-09-23" max="2026-12-31" value="2026-09-23" required aria-describedby="date-help">
+            <p class="field-help" id="date-help">23.09.2026–31.12.2026 аралығы</p>
+            <label for="event">Іс-шара түрі</label><select id="event" name="event" required></select>
+            <label for="category">Маман немесе орын санаты</label><select id="category" name="category" required></select>
+            <label for="budget">Бюджет, теңге</label><input id="budget" name="budget" type="number" min="0" max="9007199254740991" step="1" inputmode="numeric" value="2000000" required aria-describedby="budget-help">
+            <p class="field-help" id="budget-help">Каталогтағы бастапқы бағамен салыстырылады.</p>
+            <div class="optional-heading">Қосымша шарттар <span>Міндетті емес</span></div>
+            <div class="optional-grid"><div><label for="language">Жұмыс тілі</label><select id="language" name="language"><option value="">Кез келген тіл</option></select></div><div><label for="hours">Ұзақтық, сағат</label><input id="hours" name="hours" type="number" min="0.1" step="any" inputmode="decimal" placeholder="Мысалы, 6"></div></div>
+            <button class="search-button" id="submit-button" type="submit">Сәйкес профильдерді табу <span aria-hidden="true">→</span></button>
+          </fieldset>
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+        </form>
+        <div class="examples"><p>Мысалмен тексеру</p><div class="example-buttons"><button type="button" data-example="dense" disabled>Жүргізуші</button><button type="button" data-example="rare" disabled>Флорист</button><button type="button" data-example="empty" disabled>Бос нәтиже</button></div></div>
+      </aside>
+      <section class="results-panel" aria-labelledby="results-label">
+        <div class="results-heading"><div class="panel-heading"><span class="section-number">02</span><h2 id="results-label">Сіздің іріктеуіңіз</h2></div><span class="sort-note">Баға ↑ <span>·</span> тең болса, id ↑</span></div>
+        <div id="results" aria-live="polite" aria-atomic="false" aria-busy="true"><div class="empty-state"><p>Каталог жүктеліп жатыр…</p></div></div>
+        <div class="data-note"><span class="note-icon" aria-hidden="true">i</span><p>Бағалар — бастапқы бағалар. Күннің бос емес деп белгіленбеуі брондауды растамайды. Есімдер каталогта жасырындандырылған.</p></div>
+      </section>
+    </div>
+    <section class="transparency" aria-labelledby="transparency-title"><h2 id="transparency-title">Деректер туралы ашық айтамыз</h2><div class="flag-legend"><p><code>synthetic</code><span>Профиль жасанды түрде құрастырылған.</span></p><p><code>city_imputed</code><span>Қала деректерді дайындау кезінде толтырылған.</span></p><p><code>price_imputed</code><span>Баға деректерді дайындау кезінде толтырылған.</span></p></div><p class="legend-summary" id="flag-summary">Әр карточкада осы үш белгінің мәні көрсетіледі.</p></section>
+  </main>
+  <footer><span>Іріктеу · 2026</span><span>Тек таңдау. Брондау мен төлем қарастырылмаған.</span></footer>
+  <noscript><p class="form-error">Қосымшаны пайдалану үшін браузердегі JavaScript мүмкіндігін қосыңыз.</p></noscript>
+
+<!-- 3. КАТАЛОГ ЖӘНЕ ДӘЛЕЛДЕР: НАҚТЫ CSV КӨШІРМЕСІ -->
+<script id="catalog-data" type="application/json">
+{
+  "profiles": [
+    {
+      "id": "HK-39372",
+      "anon_name": "Тони Тони Чоппер",
+      "categories": [
+        "Флорист"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 200000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "корпоратив",
+        "конференция",
+        "юбилей"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-14",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-12",
+        "2026-11-14",
+        "2026-11-19",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-11-29",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-27",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Мы специализируемся на авторском цветочном оформлении и флористике для мероприятий в Алматы. Ежемесячно реализуем более 1000 заказов. Среди наших клиентов и партнёров: SkyLumen, CoffeeNoir, Trickster Café, Suisei Water, Curly Sensei, Hoshizora, Банк «Sakura Credit». Также выполняли оформление для Hotel Akatsuki, Fuyuki Grand и Atelier Sakura."
+    },
+    {
+      "id": "HK-44733",
+      "anon_name": "Буллма",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1000000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "юбилей",
+        "день рождения"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-25",
+        "2026-09-28",
+        "2026-10-01",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-07",
+        "2026-10-10",
+        "2026-10-21",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-04",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-31"
+      ],
+      "description": "Ведущий мероприятий с опытом работы более 10 лет. Стиль ведения интеллигентный, не напряжный, атмосферный. Веду как ламповые вечера от 8 человек, так и крупные бизнес форумы на 3000 человек. Всегда стараюсь наполнить вечер чем-то особенным, эксклюзивным. Языки ведения: Русский, Английский Крупные проекты, в которых был ведущим:Sakura Fondo Championship (Международная велогонка), Aoi Mix Event Almaty (международный конкурс по перманентному макияжу), NEXT MBA (3000 чел), Halloween и Новый год и Юбилей компании RideKaze(1000+ человек), Выпускной ReDawn 2.0 (Наруто Удзумаки, Тандзиро Камадо, Гон Фрикс), DemonWing jump&freez, DemonWing king of the rock, DemonWing Neymar’s five, Ryo Finance Day (400+ человек), TechnoLeaf partners day, Hoshi workshop Antalya, Hoshi workshop Sharm el sheikh, Наурыз в Маями (Флорида) 600+ человек"
+    },
+    {
+      "id": "HK-80581",
+      "anon_name": "Санджи Виндсмок",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 800000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "корпоратив",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-27",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-11-03",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-13",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-06",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Коротко обо мне: •Веду разно форматные мероприятия для тех кто ценит стиль, комфорт, персональный и креативный подход •Вхожу в Топ лучших ведущих Казахстана по версии AniWed KZ •Резидент клуба импровизаторов Improv Konoha •Обладаю приятным тембром голоса и владею вокалом •без вредных привычек, телосложение спортивное •Женат. Есть двое детей… опыт управления хаосом — профессиональный! •Благодаря своему опыту могу найти общий язык практически с любой публикой •В арсенале большое количество проведенных событий, для людей различного рода деятельности и статуса: от блогеров миллионников до политических деятелей первой величины, от фрилансеров-ремесленников до бизнесменов ультра-класса."
+    },
+    {
+      "id": "HK-88430",
+      "anon_name": "Куррапика",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 500000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "юбилей"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-27",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-08",
+        "2026-10-11",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-23",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-08",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-18",
+        "2026-11-20",
+        "2026-11-26",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Я, Куррапика — профессиональный ведущий мероприятий с современным подходом и тонким чувством аудитории. Обладаю харизмой, грамотной речью и умею создавать живую, динамичную атмосферу на любом событии. Специализируюсь на проведении корпоративных мероприятий, торжеств и деловых встреч. Уверенно удерживаю внимание гостей, чувствую настроение зала и легко адаптируюсь под формат и уровень события. Мой стиль — это сочетание интеллигентного юмора, четкой организации и высокого уровня ответственности. Мне доверяют проведение самых важных и значимых мероприятий."
+    },
+    {
+      "id": "HK-58385",
+      "anon_name": "Крилин",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 700000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "день рождения",
+        "юбилей"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-27",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-24",
+        "2026-10-26",
+        "2026-10-31",
+        "2026-11-03",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-09",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Крилин — ведущий, который превращает мероприятие в живое шоу. Финалист лиги AniHumor 2016 (студийный конкурс юмора), двухкратный победитель «Шоу Ghibli Импровизация», обладатель премии «Прорыв года 2025» и ТОП-6 лучших ведущих Казахстана по версии AniWed KZ, а также резидент творческого объединения SakuraLab. Его стиль — это энергия сцены, интеллектуальный юмор и мощная импровизация. Без шаблонов и банальных конкурсов — креативный подход , живой диалог с гостями, настоящие эмоции и атмосфера, в которой каждый человек в зале становится частью происходящего. Крилин тонко чувствует аудиторию и управляет динамикой вечера, легко объединяя разные поколения гостей. Даже самые скромные начинают улыбаться, участвовать и вовлекаться в праздник. Яркая харизма, лёгкая дерзость и современный формат ведения превращают каждое мероприятие не просто в программу, а в эмоциональный опыт, который гости вспоминают ещё долго после окончания вечера. Именно поэтому события с Крилином запоминаются не только сценарием, но и настоящими эмоциями людей. Если вам нужен тихий, формальный вечер — возможно, мы не подойдём друг другу. Но если вы хотите событие, которое гости будут вспоминать годами — вам нужен Крилин."
+    },
+    {
+      "id": "HK-42352",
+      "anon_name": "Эмилия",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 900000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "той"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-26",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-08",
+        "2026-10-10",
+        "2026-10-12",
+        "2026-10-16",
+        "2026-10-18",
+        "2026-10-21",
+        "2026-10-27",
+        "2026-10-30",
+        "2026-11-01",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-17",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Опыт ведения свадеб 13 лет Вел свадьбы в Алматы, Москве, Дубае, Бодруме, Ташкенте Статистика: 356 свадеб, 0 разводов К каждой свадьбе мы с командой подходим ответственно, изучаем пару, гостей и делаем все, чтобы этот день запомнился всем на всю жизнь."
+    },
+    {
+      "id": "HK-37181",
+      "anon_name": "Нами",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 800000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "свадьба",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-10-02",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-22",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-08",
+        "2026-11-11",
+        "2026-11-13",
+        "2026-11-17",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "«ДОРОГУ ОСИЛИТ ИДУЩИЙ, А ПРОВОДЫ ОСИЛИТ ВЕДУЩИЙ!» ВСЕМ ПРИВЕТ! МЕНЯ ЗОВУТ НАМИ…., И ДА, ЭТО МОЕ НАСТОЯЩЕЕ ОТЧЕСТВО – НИКОЛАЕВИЧ! ВЕДУ МЕРОПРИЯТИЯ УЖЕ БОЛЕЕ 15 ЛЕТ. ОСНОВНЫЕ СТИЛИ ВЕДЕНИЯ МЕРОПРИЯТИЙ – ДИНАМИКА, ИМПРОВИЗАЦИЯ, ИНТЕРАКТИВЫ. Я НЕ ШУЧУ НАД ЧЕЛОВЕКОМ, Я ШУЧУ ВОКРУГ ЧЕЛОВЕКА ПРОВОДИЛ ЗАКРЫТЫЕ И ОТКРЫТЫЕ ИВЕНТЫ, С УЧАСТИЕМ ПЕРВЫХ ЛИЦ ГОСУДАРСТВА. СТАРАЮСЬ К КАЖДОМУ МЕРОПРИЯТИЮ ПОДХОДИТЬ С АВТОРСКИМ СЦЕНАРИЕМ И АДРЕСНЫМИ КОНКУРСАМИ. ЛЮБИМОЕ ВЫРАЖЕНИЕ — «ДЕРЖИТЕ НОГИ В ТЕПЛЕ, А ГОЛОВУ В ПОЗИТИВЕ!»"
+    },
+    {
+      "id": "HK-26808",
+      "anon_name": "Идзуку Мидория",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 600000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-09",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-21",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-13",
+        "2026-11-17",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Финалист премии AniWed Awards KZ ’23 Резидент авторской группы «SakuraLab» Ведущий проекта «3 Момо» Организатор и ведущий интенсива «AniWed Pro» Участник международной конференции «AnimeTime» Сценарист команды КВН Высшей лиги Резидент и основатель клуба «Ghibli Stand-Up» Отец самой красивой девочки на свете"
+    },
+    {
+      "id": "HK-76268",
+      "anon_name": "Сацуки Кусакабэ",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 200000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-25",
+        "2026-09-27",
+        "2026-09-29",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-08",
+        "2026-10-10",
+        "2026-10-13",
+        "2026-10-17",
+        "2026-10-20",
+        "2026-10-24",
+        "2026-10-27",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-13",
+        "2026-11-15",
+        "2026-11-17",
+        "2026-11-21",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Привет! Я Сацуки Кусакабэ — свадебный фотограф. Снимаю в Алмате и Астане. Вхожу в топ 5 Алматы по версии AniWed Rating. Люблю живые кадры, настоящие улыбки и моменты, которые невозможно повторить."
+    },
+    {
+      "id": "HK-10990",
+      "anon_name": "Тодороки Шото",
+      "categories": [
+        "Видеограф"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 400000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 12,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-10-05",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-24",
+        "2026-10-27",
+        "2026-10-29",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-19",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "TODOROKI SHOTO WEDDING VIDEOGRAPHER -colorist of the year 2025 🏆 Считаю себя счастливым человеком, так как любимое занятие стало делом моей жизни. Больше всего в съёмке я ценю слаженную работу в команде, где все ориентированы на качественный результат, полностью отдаваясь процессу. А качественным результатом считаю благодарные отзывы моих пар и собственное удовлетворение от проделанной работы."
+    },
+    {
+      "id": "HK-61323",
+      "anon_name": "Тэммари Собаку",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 250000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "той"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": 12,
+      "busy_dates": [
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-04",
+        "2026-10-06",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-23",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-11-01",
+        "2026-11-03",
+        "2026-11-05",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-23",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29"
+      ],
+      "description": "Приветствую меня зовут Тэммари Собаку. Я свадебный фотограф. Последние годы больше внимание уделяю таким жанрам, как свадебный фотожурнализм, документально — свадебный фотожурнализм. При слиянии этих жанров создаются уникальные и волнующие фотографии для каждой пары . Молодожёнам предлагаю их особенную историю и стараюсь сохранить самые искренние эмоции. Если у вас нет опыта в сьемках , я научу, как свободно чувствовать себя перед камерой и получить удовольствие от съемки. С моим видением подчеркну вашу творческую способность . Я гарантирую креативность и индивидуальность , потому как занимаюсь любимым делом. Креативность и индивидуальность — важные аспекты моем любимом деле."
+    },
+    {
+      "id": "HK-74914",
+      "anon_name": "Киллуа Золдик",
+      "categories": [
+        "Видеограф"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 300000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": 12,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-05",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-12",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-17",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Я свадебный видеограф из Астаны. Работаю по всему Казахстану. Снимаю с душой и ради удовольствия."
+    },
+    {
+      "id": "HK-30583",
+      "anon_name": "Леорио Паради",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 350000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "корпоратив",
+        "конференция"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-27",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-11",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-22",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-30",
+        "2026-11-01",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-11",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-12-03",
+        "2026-12-06",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Всем привет. Меня зовут Леорио. Являюсь свадебным фотографом. Работаю в Алматы и по всему миру. Очень часто снимаю и в Астане. Эстетика, атмосфера, детали — это все про меня. География моих съемок: Франция(fashion week), Италия, Великобритания, Турция, Грузия, ОАЭ, Азербайджан и тд. Помимо свадеб снимаю и концерты, имею такие кейсы как: MC Kaze, Crimson Peas, Ray Nova, IL Sora, Sakura Sterling, Yumeko, Kaze Khalib, Tengri Bek, Baku Star, RiverSound, Aiyar Ray, Miras Hoshi. До встречи и на ваших меропориятиях! aniportfolio.kz"
+    },
+    {
+      "id": "HK-97737",
+      "anon_name": "Фэй Валентайн",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 200000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "день рождения",
+        "юбилей"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-06",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-19",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-27",
+        "2026-10-30",
+        "2026-11-03",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-18",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-24",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-05",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Я — свадебный профессиональный фотограф из Астаны. Снимаю с душой и вниманием к деталям, чтобы вы могли сохранить самые важные моменты своей жизни в кадре. Специализируюсь на свадебной и семейной съёмке, love story, мероприятиях и портретных фотосессиях. Работаю как в студии, так и на выездных локациях, создавая фотографии с живыми эмоциями и атмосферой. Каждая съёмка — это история, которую я помогаю вам рассказать. Индивидуальный подход, качественная обработка и комфортная съёмочная атмосфера — мой стандарт в работе. Готов обсудить ваши идеи и создать для вас красивые, искренние и запоминающиеся кадры."
+    },
+    {
+      "id": "HK-98562",
+      "anon_name": "Какаши Хатаке",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 200000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "юбилей"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-03",
+        "2026-10-08",
+        "2026-10-16",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-11",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-18",
+        "2026-11-20",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Я — свадебный фотограф, который работает с эстетикой, эмоциями и деталями. Сняла более 80 мероприятий — от камерных мероприятий до масштабных свадеб. Для меня важно не просто «красиво», а чтобы через 10 лет вы открыли фотографии и снова почувствовали этот день. Я помогаю невестам выглядеть естественно и уверенно даже без модельного опыта — направляю, подсказываю позирование и создаю спокойную атмосферу в кадре. Люблю путешествовать и легко выезжаю на съёмки в другие города и страны. Каждая съёмка — это индивидуальный подход и внимание к истории пары."
+    },
+    {
+      "id": "HK-53108",
+      "anon_name": "Альфонс Элрик",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 300000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "день рождения"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-16",
+        "2026-10-22",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-04",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-22",
+        "2026-11-26",
+        "2026-11-28",
+        "2026-11-30",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Меня зовут Альфонс Элрик. Я фотограф и уже около семи лет я ловлю моменты, которые обычно проходят незаметно. Я снимал в разных городах и странах — Париже, Дубае, Москве, Китае. Но география для меня не так важна, как чувства, свет и тишина внутри кадра."
+    },
+    {
+      "id": "HK-11484",
+      "anon_name": "Уинри Рокбелл",
+      "categories": [
+        "Декоратор"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 2000000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "юбилей",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-27",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-30",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-17",
+        "2026-11-19",
+        "2026-11-27",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-04",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Casa Yuki Lusso — студия авторского декора мероприятий. Более 5 лет создаём концепции свадеб, юбилеев и корпоративных событий премиум-уровня. Работаем под ключ: от идеи и эскиза до монтажа и финальной реализации. Каждый проект — индивидуальная концепция, отражающая стиль и статус клиента. Наш приоритет — эстетика, точность исполнения и вау-эффект. индивидуальные концепции под клиента авторские эскизы перед реализацией собственное производство конструкций работа под ключ без стресса для клиента опыт крупных проектов и масштабных площадок"
+    },
+    {
+      "id": "HK-97041",
+      "anon_name": "Тэнъя Иида",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1000000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "корпоратив"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-07",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-14",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-16",
+        "2026-11-18",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Тэнъя ведёт 12 лет на каз/рус языках , современно, интеллигентно , с юмором ! TOP 7 лучших ведущих KZ по мнению @aniwed.kz.Так же является резидентом школы Ведущих в г.Челябинск , г.Москва."
+    },
+    {
+      "id": "HK-60927",
+      "anon_name": "Нико Робин",
+      "categories": [
+        "Подарки и сувениры"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 150000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "корпоратив",
+        "юбилей",
+        "день рождения"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-04",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-18",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-25",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-11",
+        "2026-11-14",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-23",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-19",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Konpeito Craft — производство леденцов без сахара с индивидуальным дизайном для ваших значимых событий. Бренд создаёт не просто сладости, а маленькие детали, которые делают праздник ещё более запоминающимся: леденцы с именами, датами, фотографиями, логотипами и персональными надписями. Каждый заказ изготавливается индивидуально под концепцию мероприятия. В основе продукции — немецкий изомальт, который используется в европейской кондитерской индустрии как альтернатива сахару. Такие леденцы не вызывают резких скачков глюкозы и подходят людям, контролирующим питание. Konpeito Craft подойдут для: — свадеб и love story — детских праздников — корпоративных мероприятий — welcome box и подарков гостям — брендированных событий и презентаций Минимальный заказ — от 15 штук. Доступны различные размеры, формы и полностью персонализированный дизайн под ваш ивент."
+    },
+    {
+      "id": "HK-62242",
+      "anon_name": "Юдзи Итадори",
+      "categories": [
+        "Видеограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 500000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-16",
+        "2026-10-20",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-06",
+        "2026-11-08",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-26",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-10",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-31"
+      ],
+      "description": "Юдзи — свадебный видеограф с авторским взглядом и международной практикой. За 2 года она вошла в топ-3 видеографов страны по версии AniWed KZ, стала победителем в номинации «Лучший репортажный видеограф» фестиваля Sakura Frame Fest, организовала собственные ивент-проекты и прошла обучение у ведущих специалистов индустрии. Его география съёмок не ограничена — Юдзи работал в Японии, Италии, Грузии, Дубае, Москве и Казахстане. Её видео — это не просто фиксация событий, а субъективное, эмоциональное прочтение момента, где звук, ритм и атмосфера становятся языком чувств. С ней работают клиенты, которые ценят глубину, искренность и живые эмоции."
+    },
+    {
+      "id": "HK-44923",
+      "anon_name": "Мицури Канроджи",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 650000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "юбилей",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-29",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-10-29",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-20",
+        "2026-11-25",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-24",
+        "2026-12-28",
+        "2026-12-29"
+      ],
+      "description": "Приветствую всех, дорогие друзья! Меня зовут Мицури Канроджи – я профессиональный ведущий и сценарист. Обращаясь ко мне, вы можете не сомневаться, мы учтём все ваши пожелания. Вместе с вами мы разработаем ОРИГИНАЛЬНЫЙ сценарий, согласуем все нюансы и сделаем для вас настоящий праздник! именно таким каким вы его видите! Что вас ждёт: • Разработанный ТОЛЬКО для Вас сценарий • Импровизация, живой интеллигентный юмор • Современные интерактивы, креативные идеи • Динамичный праздник без шаблонов и банальностей • DJ и современная танцевальная музыка и мультимедийное оборудование •Связь со мной 247, помощь и поддержка Для Вашего комфорта заключаем договор Более подробную информацию вы можете узнать, связавшись со мной по телефону. С Уважением, Мицури Канроджи"
+    },
+    {
+      "id": "HK-91112",
+      "anon_name": "Мэгуми Фушигуро",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 300000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-30",
+        "2026-10-03",
+        "2026-10-05",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-27",
+        "2026-10-31",
+        "2026-11-03",
+        "2026-11-05",
+        "2026-11-08",
+        "2026-11-12",
+        "2026-11-16",
+        "2026-11-22",
+        "2026-11-27",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-15",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Я — свадебный фотограф с тонким чувством эстетики и эмоций. Моя сила не в «шаблонной красоте», а в умении видеть человека: взгляд, паузу, напряжение, нежность. Я хорошо чувствуешь настроение пары и умею подстраиваться под него, не ломая процесс. Мои кадры — не про позы, а про состояние. Мне важно, чтобы на фотографиях оставалась жизнь: взгляд, пауза, прикосновение, волнение. Я люблю честные эмоции, лёгкость и кадры с воздухом — когда фотография не кричит, а чувствуется. Чистоте кадра, лёгкость и визуальное дыхание — мне важно, чтобы фотография возвращала вас снова и снова в важный день вашей жизни. Я внимательна к деталям, людям и атмосфере дня. Для меня съёмка — это не просто работа, а проживание истории вместе с вами. Если вам близка живая, эстетичная и ненавязчивая фотография — мы точно совпадём."
+    },
+    {
+      "id": "HK-77793",
+      "anon_name": "Спайк Спигел",
+      "categories": [
+        "Ведущий церемонии"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 200000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 3,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-25",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-20",
+        "2026-10-25",
+        "2026-10-30",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-27"
+      ],
+      "description": "Ведущая и церемониймейстер Спайк Спигел! — Ведение на казахском и русском языках"
+    },
+    {
+      "id": "HK-76335",
+      "anon_name": "Йор Форджер",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Зарубежье",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 600000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "свадьба"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-10-01",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-22",
+        "2026-10-24",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-31"
+      ],
+      "description": "Йор Форджер — профессиональный фотограф, работающий с событиями и частными мероприятиями. В её кадрах — живые эмоции, естественность и аккуратная эстетика, позволяющая сохранить атмосферу события и его ключевые моменты."
+    },
+    {
+      "id": "HK-20640",
+      "anon_name": "Шикамару Нара",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 150000,
+      "price_imputed": false,
+      "event_formats": [
+        "день рождения",
+        "юбилей",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 4,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-29",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-20",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-10",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-21",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30"
+      ],
+      "description": "Шикамару Нара — профессиональный фотограф, специализирующийся на съёмке событий и частных мероприятий. Его работы — это внимание к деталям, живые эмоции и аккуратная, эстетичная подача, которая сохраняет атмосферу события и его настроение."
+    },
+    {
+      "id": "HK-16628",
+      "anon_name": "Нобара Кугисаки",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 600000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 12,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-26",
+        "2026-10-01",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-26",
+        "2026-10-28",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Нобара Кугисаки — профессиональный фотограф с тонким чувством стиля и вниманием к деталям. Является свадебным и репортажным фотографом, умеет ловить живые эмоции и передавать атмосферу события через искренние, естественные кадры. Работает по всему Казахстану и за рубежом, создавая эстетичные и живые истории."
+    },
+    {
+      "id": "HK-68220",
+      "anon_name": "Рок Ли",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 190000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": 12,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-10",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-27",
+        "2026-11-06",
+        "2026-11-08",
+        "2026-11-12",
+        "2026-11-16",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-31"
+      ],
+      "description": "Рок Ли — один из лучших свадебных и репортажных фотографов в городе Алматы. Клиенты описывают как профессионала своего дела, ответственного и пунктуального. Он создает яркие, живые и красиво обработанные фотографии, а работа с ним оставляет только положительные эмоции, отмечают довольные молодожены, получившие снимки в обещанные сроки. Его стиль — это сочетание репортажной съемки(захват моментов) и постановочных кадров, а главная цель — передать атмосферу и эмоции дня свадьбы. Ключевые моменты: Профессионализм и качество: Высокие оценки за обработку и своеобразный стиль фотографий. Ответственность: Соблюдает сроки, пунктуален, надежен. Эмоциональность: Фотографии получаются живыми, яркими и передающими чувства и атмосферу. Опыт: он снимает не только свадьбы но и концерты. Он снимал концерты мировых звёзд как «Jenny Sakura», «Nicole Hoshi», рэпера «T.K.» Концерт «Тенгри Саунд» с 30 тыс зрителей. Снимал конкурсы красоты: «Miss AniStan 2023, 2025» и «Ару Sakura 2024» Пробуя себя в разных жанрах съемки, Рок Ли демонстрирует свои лучшие навыки не смотря на все трудности и припятствия."
+    },
+    {
+      "id": "HK-74147",
+      "anon_name": "Джет Блэк",
+      "categories": [
+        "Инструменталист"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 500000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "корпоратив",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 4,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-27",
+        "2026-10-04",
+        "2026-10-06",
+        "2026-10-11",
+        "2026-10-16",
+        "2026-10-18",
+        "2026-10-20",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-20",
+        "2026-11-24",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Инуяша и Кагоме — музыкальный дуэт премиум-класса, инструменталисты с тонким чувством стиля и атмосферы. Они исполняют ваши любимые композиции, создавая изысканное музыкальное сопровождение для свадеб, корпоративов, юбилеев, концертов и частных событий. Музыка Инуяши и Кагомэ — это вкус, эмоция и элегантность в каждом звучании."
+    },
+    {
+      "id": "HK-35913",
+      "anon_name": "Тохру",
+      "categories": [
+        "Фотограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 400000,
+      "price_imputed": true,
+      "event_formats": [
+        "корпоратив",
+        "конференция"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-30",
+        "2026-10-10",
+        "2026-10-20",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-04",
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Тохру — ивент-фотограф с более чем 10-летним опытом и более 1000 реализованных съёмок. Он работает с частными и бизнес-ивентами любого масштаба — от камерных торжеств до крупных форумов и презентаций. Тохру уверенно чувствует динамику события, умеет передать атмосферу, статус и ключевые моменты мероприятия, оставаясь незаметным для гостей и организаторов.В его портфолио — съёмки для Sakura Fashion Week Almaty, Ghibli Asia Ball, HelpKids Kazakhstan, Eurasian Fashion Week, а также сотрудничество с ведущими агентствами и брендами, включая EventDream.kz."
+    },
+    {
+      "id": "HK-46450",
+      "anon_name": "Сакура Харуно",
+      "categories": [
+        "Инструменталист"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 350000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "свадьба",
+        "юбилей",
+        "той"
+      ],
+      "languages": [
+        "казахский",
+        "русский",
+        "английский"
+      ],
+      "max_hours": 4,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-12",
+        "2026-10-14",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-25",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-06",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-12",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-18",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-29",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Bebop Jazz Collective — джазовый проект с шестилетней историей на сцене Казахстана. Его визитная карточка — узнаваемое авторское звучание с контрабасом, где классика, этника и джазовые стандарты соединяются в уникальной манере исполнения. Коллектив не копирует каверы, а предлагает оригинальные интерпретации — от казахских народных мелодий до современных мировых хитов. Bebop Jazz Collective выступает в премиум-сегменте: частных мероприятий до открытий бутиков и бизнес-ивентов. Среди клиентов: Ginkgo Group, TechDomo, Bijou Étoile, Samsara Tech, Fontaine Noir, Kitsune Motors, Belle Sakura и другие. Проект регулярно сотрудничает с фэшн-индустрией и дипломатическими представительствами выступает на событиях с участием деловой и культурной элиты. Форматы: Trio — welcome-зоны и камерные вечера (контрабас-вокал + гитара + саксофон / домбра). Quartet — расширенный репертуар, этно-джазовый оттенок (контрабас-вокал + гитара + саксофон+ домбра). Подходит для welcome-формата и сопровождения камерных мероприятий. Quintet — сценический формат с живыми барабанами (контрабас-вокал + гитара + саксофон + домбра + барабаны)."
+    },
+    {
+      "id": "HK-25279",
+      "anon_name": "Мегумин",
+      "categories": [
+        "Лайв-бэнд"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 800000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "день рождения",
+        "юбилей"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 5,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-06",
+        "2026-10-08",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-24",
+        "2026-10-27",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-05",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Мы — Crimson Demon Live! И да, мы действительно сверкаем — звуком, энергией и атмосферой, которую создаём на сцене."
+    },
+    {
+      "id": "HK-92824",
+      "anon_name": "Поньо",
+      "categories": [
+        "Национальный ансамбль",
+        "Танцевальный коллектив",
+        "Шоу-программа"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 500000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "юбилей"
+      ],
+      "languages": [
+        "казахский"
+      ],
+      "max_hours": 2,
+      "busy_dates": [
+        "2026-09-29",
+        "2026-10-04",
+        "2026-10-06",
+        "2026-10-10",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-22",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-11",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Авторский проект Ичиго и Рукии Гармония песни и красоты Ансамбль Sailor Dala, который украсит ваше торжество"
+    },
+    {
+      "id": "HK-36965",
+      "anon_name": "Эдвард Ван Хог",
+      "categories": [
+        "Национальный ансамбль",
+        "Танцевальный коллектив",
+        "Шоу-программа"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 500000,
+      "price_imputed": false,
+      "event_formats": [
+        "той",
+        "свадьба",
+        "юбилей"
+      ],
+      "languages": [
+        "казахский"
+      ],
+      "max_hours": 2,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-13",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-18",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-28",
+        "2026-10-30",
+        "2026-11-01",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-08",
+        "2026-11-19",
+        "2026-11-21",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-11-30",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Выступаем на вашем торжестве Прославляем казахскую песню на весь мир"
+    },
+    {
+      "id": "HK-39301",
+      "anon_name": "Рамь",
+      "categories": [
+        "Национальный ансамбль",
+        "Танцевальный коллектив",
+        "Шоу-программа"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 500000,
+      "price_imputed": false,
+      "event_formats": [
+        "той",
+        "свадьба",
+        "корпоратив"
+      ],
+      "languages": [
+        "казахский"
+      ],
+      "max_hours": 2,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-10",
+        "2026-10-19",
+        "2026-10-22",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-11-02",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-15",
+        "2026-11-19",
+        "2026-11-22",
+        "2026-11-25",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Ансамбль №1 в Казахстане Авторский проект Ичиго и Рукии, впервые выступивший перед главой государства"
+    },
+    {
+      "id": "HK-45928",
+      "anon_name": "Очако Урарака",
+      "categories": [
+        "Видеограф"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 800000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "юбилей",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-25",
+        "2026-10-01",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-15",
+        "2026-10-19",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-09",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-28",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-29"
+      ],
+      "description": "Очако Урарака — видеограф, который работает с живыми эмоциями и настоящими моментами. Он специализируется на свадебной, семейной и рекламной съёмке, создавая атмосферные видео с естественными цветами и искренним настроением. Очако работает в Алматы и по всему миру, легко выстраивает контакт с парами и остаётся почти незаметным в кадре — именно поэтому эмоции в его работах выглядят так естественно и глубоко. Его подход основан на доверии, комфорте и совместной работе с парой, где результат рождается в диалоге. Его проекты регулярно появляются в публикациях ведущих организаторов и свадебных брендов, что подтверждает высокий уровень доверия и стабильное качество работы. Формат съёмки: full day"
+    },
+    {
+      "id": "HK-83709",
+      "anon_name": "Рей Аянами",
+      "categories": [
+        "Лайв-бэнд"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1150000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "юбилей",
+        "корпоратив"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-13",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-22",
+        "2026-10-24",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-08",
+        "2026-11-10",
+        "2026-11-12",
+        "2026-11-15",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "В репертуаре группы большой выбор казахских песен, ретро-шлягеров, хитов 80-х, 90-х, 2000-х, а так же, современные хиты. Начиная от модных ивэнтов до масштабных свадеб, «Eva Sound» идеально впишется в любой формат мероприятия! Наши музыканты профессионалы своего дела. Их любовь к музыке передаётся каждой ноте. «Eva Sound» band – это парад незабываемых впечатлений и отличного настроения. Большой музыкальный состав: 4 вокалиста, струнный квартет, духовой брасс, перкуссионист, клавишник, барабанщик, гитарист и бас-гитарист."
+    },
+    {
+      "id": "HK-23752",
+      "anon_name": "Дзэнъицу Агацума",
+      "categories": [
+        "Лайв-бэнд"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1150000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "юбилей",
+        "корпоратив"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-26",
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-20",
+        "2026-10-23",
+        "2026-10-25",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-19",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "В репертуаре группы большой выбор казахских песен, ретро-шлягеров, хитов 80-х, 90-х, 2000-х, а так же, современные хиты. Начиная от модных ивэнтов до масштабных свадеб, «Thunder Breath Band» идеально впишется в любой формат мероприятия! Наши музыканты профессионалы своего дела. Их любовь к музыке передаётся каждой ноте. «Thunder Breath Band» band – это парад незабываемых впечатлений и отличного настроения. Расширенный состав Thunder Breath Band: 🎤 два вокалиста 🎤 вокалистка 🥁 барабанщик 🎸 бас-гитарист 🎸 соло-гитарист 🎺 труба 🎷 саксофон 🎵 тромбон Репертуар включает ретро-хиты, треки из нулевых, современные композиции и казахскую музыку. Такой состав даёт плотный живой звук, который наполняет пространство и создаёт атмосферу настоящего выступления."
+    },
+    {
+      "id": "HK-31819",
+      "anon_name": "Каору Камия",
+      "categories": [
+        "Лайв-бэнд"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1150000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "день рождения",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 5,
+      "busy_dates": [
+        "2026-09-26",
+        "2026-10-03",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-20",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-04",
+        "2026-11-07",
+        "2026-11-09",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-27",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "«Rurouni Sound» – это особое и незабываемое звучание самых ярких и любимых вам музыкальных композиций. Группа одинаково хорошо звучит как на больших концертных площадках и open-air’ах, так и в маленьких уютных клубах. Визитная карточка группы — это сочетание высокого профессионализма каждого музыканта и незабываемого вокала солистки, что в целом создаёт на сцене безумную энергетику драйва. Расширенный состав группы Rurouni Sound: 🎤 вокалист 🎤 вокалистка 🥁 барабанщик 🎸 бас-гитарист 🎸 соло-гитарист 🎺 труба 🎷 саксофон 🎵 тромбон Большой состав группы Rurouni Sound: 🎤4 профессиональных вокалиста 🥁барабанщик,перкуссионист, 🎸бас-гитарист,соло-гитарист 🎺 труба 🎷 саксофон 🎵 тромбон 🎻 струнный квартет (4 музыканта) 🔉звукорежиссёр Репертуар: от ретро-хитов до современных треков: любимые песни 80-х, 90-х, 2000-х, современные композиции и, конечно, казахская музыка."
+    },
+    {
+      "id": "HK-57480",
+      "anon_name": "Кобаяши",
+      "categories": [
+        "Лайв-бэнд"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1500000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "юбилей",
+        "свадьба"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 5,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-27",
+        "2026-10-05",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-19",
+        "2026-10-22",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-10-29",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-08",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-31"
+      ],
+      "description": "KOBAYASHI SHOW BAND — это синергия живой музыки, эмоций и шоу. Профессиональный коллектив, который превращает каждое выступление в яркий перформанс с мощной энергетикой, хореографией и активным взаимодействием с публикой. Репертуар KOBAYASHI охватывает всё: от культовых хитов 90-х и 2000-х до современных композиций. Это не просто концерт — это шоу, где музыка оживает через движение, стиль и атмосферу.Команда постоянно развивается, экспериментирует с форматами и создаёт уникальные выступления, которые выделяют их среди других и делают событие по-настоящему запоминающимся."
+    },
+    {
+      "id": "HK-35215",
+      "anon_name": "Кики",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 900000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "юбилей",
+        "корпоратив"
+      ],
+      "languages": [
+        "казахский",
+        "русский",
+        "английский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-10-01",
+        "2026-10-03",
+        "2026-10-05",
+        "2026-10-08",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-16",
+        "2026-10-20",
+        "2026-10-24",
+        "2026-10-28",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Кики — редкое сочетание тонкого юмора, харизмы и безупречных манер. Он создаёт атмосферу, в которой гости чувствуют себя вовлечёнными, а праздник — особенным. С ним вы узнаете, что такое персональный подход и как выглядит идеально выстроенное мероприятие. Работает на казахском, русском и английском языках. Ведёт все форматы: свадьбы, проводы невесты, обряд первых шагов, праздник в честь новорождённого, поминальный обед, памятные годовщины, юбилеи, той обрезания, тимбилдинги, конференции и крупные события. Кики входит в топ-10 ведущих Казахстана и остаётся тем профессионалом, которому доверяют самые важные дни. Ваш праздник — в руках ведущего, который делает уровень. Всегда ваш, Кики."
+    },
+    {
+      "id": "HK-77838",
+      "anon_name": "Хаул",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1000000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "юбилей",
+        "свадьба"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-06",
+        "2026-10-08",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-24",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-17",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-26",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Профессиональный ведущий с интеллигентной, располагающей и ненавязчивой подачей. Его стиль — культурная импровизация, тонкий юмор и естественная энергия, которые делают атмосферу праздника живой, изысканной и запоминающейся. Он — актёр театра и кино, педагог по актёрскому мастерству театральной академии искусств, солист этно-рок группы «Тенгри Rock» и телеведущий телеканала «Hoshizora TV». Такой опыт позволяет ему работать глубже, тоньше и создавать праздник, в котором каждый момент звучит правильно. Для него каждое событие — не просто банкет, а самый важный день клиента. Ответственность, забота и уважение — основа его работы. Язык проведения: казахский"
+    },
+    {
+      "id": "HK-72938",
+      "anon_name": "Софи Хаттер",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 2000000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "свадьба",
+        "юбилей",
+        "той"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-26",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-12",
+        "2026-10-15",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-17",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-26",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Ведущий, актер, участник КВН команды «Ghibli Микс» — Высшая лига. Стиль ведения: развлекательный, с юмором, официальный. Язык ведения: казахский, русский. Большая база игр и конкурсов, свежий юмор на актуальные темы."
+    },
+    {
+      "id": "HK-27222",
+      "anon_name": "Сон Гоку",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1000000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "корпоратив",
+        "конференция"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-05",
+        "2026-10-09",
+        "2026-10-12",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-21",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-28",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-07",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-17",
+        "2026-11-21",
+        "2026-11-24",
+        "2026-11-27",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Сон Гоку — один из самых востребованных двуязычных ведущих Алматы с опытом более 12 лет. Его стиль — европейская подача, тонкий юмор, уважение к традициям и умение создать атмосферу, в которой комфортно каждому гостю. Начав карьеру на телевидении, Гоку стал голосом крупнейших медиа Казахстана и постоянным ведущим масштабных событий. Его профессиональная история включает работу на телеканалах Aiyar TV, Nurdala TV, Otan TV, HitStar TV, SportSekai и радиостанциях Hikari FM, Yume FM. С Гоку сотрудничали Magna Market, Hikari Premium Al-Farabi, Kurichiken, MoonBucks, Sora Bank, Tsuki Bank, Ginkgo Group, MegaHoshi Mall, Merlin Ghibli DIY, Eureka Ghibli и другие бренды. Гоку — ведущий, который держит зал, уважает культуру и превращает событие в тёплую, лёгкую и динамичную историю."
+    },
+    {
+      "id": "HK-75012",
+      "anon_name": "Джинбей",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 1300000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "конференция"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-28",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-05",
+        "2026-10-11",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-08",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-30",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-30"
+      ],
+      "description": "Джинбей — ведущий нового поколения, который соединяет опыт 10 лет в индустрии, медийность и безупречное чувство аудитории. Он работает с крупнейшими брендами и международными площадками, ведёт мероприятия Fortune Sekai, технологические форумы, концерты и премиальные частные события. Амбассадор Digital Sakura Almaty, участник медиапрограмм Formula 1, партнёр глобальных компаний — от PearTech до GateCard. Джинбей создаёт атмосферу, задаёт тон событию и удерживает внимание так, чтобы каждый момент стал значимым. Стиль, энергия и профессионализм — три качества, которые делают его одним из самых востребованных ведущих страны."
+    },
+    {
+      "id": "HK-29829",
+      "anon_name": "Аня Форджер",
+      "categories": [
+        "Ведущий"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": false,
+      "price_from_kzt": 700000,
+      "price_imputed": false,
+      "event_formats": [
+        "день рождения",
+        "корпоратив",
+        "юбилей"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-05",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-28",
+        "2026-11-02",
+        "2026-11-04",
+        "2026-11-12",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-26",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-05",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Без долгих речей и наставлений на ивентах. Только развлечения и танцы. Интересен любой публике — как взрослым, так и молодежи. Аня также обаятельна в жизни, как и на сцене. Она — ответственная, исполнительная и креативная."
+    },
+    {
+      "id": "HK-35846",
+      "anon_name": "Аска Ленгли",
+      "categories": [
+        "Фото и видеобудки",
+        "Шоу-программа"
+      ],
+      "city": "Алматы",
+      "city_imputed": true,
+      "synthetic": false,
+      "price_from_kzt": 450000,
+      "price_imputed": true,
+      "event_formats": [
+        "корпоратив",
+        "свадьба",
+        "юбилей",
+        "конференция"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-03",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-28",
+        "2026-10-30",
+        "2026-11-01",
+        "2026-11-05",
+        "2026-11-07",
+        "2026-11-13",
+        "2026-11-15",
+        "2026-11-19",
+        "2026-11-21",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "NERV Events – команда профессионалов, для которых важен результат. Мы создаём впечатления, о которых хочется рассказывать снова и снова. Компания на рынке более 15 лет. 3 основных направления: Встреча гостей; Световые и пиксельные шоу; Интерактивные фото/видеозоны. В нашей команде – технические специалисты, артисты и менеджеры, объединённые одной целью: делать вау-эффект реальностью. Мы соединяем технологии и искусство, превращая любое событие в синтез эмоций, света и движения."
+    },
+    {
+      "id": "HK-64395",
+      "anon_name": "Иноскэ Хашибира",
+      "categories": [
+        "Банкетный зал",
+        "Загородная площадка",
+        "Ресторан"
+      ],
+      "city": "Алматы",
+      "city_imputed": true,
+      "synthetic": false,
+      "price_from_kzt": 2500000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "корпоратив",
+        "юбилей",
+        "день рождения"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-27",
+        "2026-09-29",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-25",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-12",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Nerima Terrace – стильная панорамная локация в Алматы с захватывающим видом на город и горы. Пространство сочетает современную атмосферу, уютные террасы и эффектные закаты, идеально подходя для мероприятий, романтических вечеров и отдыха в одном из самых живописных мест города."
+    },
+    {
+      "id": "HK-72785",
+      "anon_name": "Асуна Юки",
+      "categories": [
+        "Банкетный зал",
+        "Отель",
+        "Ресторан"
+      ],
+      "city": "Алматы",
+      "city_imputed": true,
+      "synthetic": false,
+      "price_from_kzt": 6000000,
+      "price_imputed": true,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "свадьба",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-30",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-15",
+        "2026-10-19",
+        "2026-10-24",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-03",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-10",
+        "2026-11-14",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-31"
+      ],
+      "description": "Fuyuki Grand – один из самых роскошных отелей Алматы с панорамными видами на горы и город, расположенный в башне Sakura Tower. Локация сочетает элегантный современный интерьер, премиальный сервис, изысканные рестораны и атмосферу уединённой роскоши – идеальное место для деловых встреч, особых событий и отдыха на высоте."
+    },
+    {
+      "id": "HK-99701",
+      "anon_name": "Сосукэ",
+      "categories": [
+        "Банкетный зал",
+        "Загородная площадка",
+        "Ресторан"
+      ],
+      "city": "Алматы",
+      "city_imputed": true,
+      "synthetic": false,
+      "price_from_kzt": 4000000,
+      "price_imputed": true,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-28",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-20",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-23",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Ouran Golf Club – премиальный гольф-курорт и ресторанный комплекс в Алматы с живописными панорамами гор, просторными зелёными полями и атмосферой уединённого отдыха. Локация идеально подходит для деловых встреч, ужинов на террасе и спокойного отдыха в окружении природы и элегантного сервиса."
+    },
+    {
+      "id": "HK-58236",
+      "anon_name": "Шинобу Кочо",
+      "categories": [
+        "Банкетный зал",
+        "Загородная площадка",
+        "Ресторан"
+      ],
+      "city": "Алматы",
+      "city_imputed": true,
+      "synthetic": false,
+      "price_from_kzt": 3000000,
+      "price_imputed": true,
+      "event_formats": [
+        "той",
+        "свадьба",
+        "юбилей",
+        "корпоратив"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-30",
+        "2026-10-03",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-23",
+        "2026-10-31",
+        "2026-11-03",
+        "2026-11-05",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-29",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Наусикая – атмосферный ресторан национальной казахской кухни на вершине городской горы с панорамным видом на Алматы и горы. Интерьер вдохновлён традиционной юртой и украшен национальными мотивами, а уютная атмосфера и аутентичная кухня делают это место идеальным для знакомства с казахской культурой и красивых вечеров."
+    },
+    {
+      "id": "HK-50695",
+      "anon_name": "Хината Хьюга",
+      "categories": [
+        "Банкетный зал",
+        "Ресторан"
+      ],
+      "city": "Алматы",
+      "city_imputed": true,
+      "synthetic": false,
+      "price_from_kzt": 2000000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "юбилей",
+        "день рождения"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-06",
+        "2026-10-09",
+        "2026-10-12",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-27",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-05",
+        "2026-11-08",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-27",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Villa Cavallone – элегантный ресторан итальянской и средиземноморской кухни в Алматы с атмосферой европейской виллы. Пространство сочетает роскошный интерьер, уютные террасы, живую музыку и красивые виды на горы, создавая идеальное место для романтических ужинов, встреч и особых событий."
+    },
+    {
+      "id": "HK-69010",
+      "anon_name": "Дарквнесс",
+      "categories": [
+        "Банкетный зал",
+        "Загородная площадка",
+        "Ресторан"
+      ],
+      "city": "Алматы",
+      "city_imputed": true,
+      "synthetic": false,
+      "price_from_kzt": 3500000,
+      "price_imputed": true,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "свадьба"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-27",
+        "2026-09-28",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-06",
+        "2026-10-08",
+        "2026-10-11",
+        "2026-10-14",
+        "2026-10-16",
+        "2026-10-20",
+        "2026-10-23",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-14",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-26",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Totoro Golf Club – атмосферный гольф-клуб и ресторан у подножия Заилийского Алатау в Алматы. Локация сочетает ухоженные зелёные поля, панорамные виды на горы и спокойную премиальную атмосферу. Отличное место для деловых встреч, романтического ужина или отдыха на террасе с красивым видом и европейско-азиатской кухней."
+    },
+    {
+      "id": "HK-19103",
+      "anon_name": "Мэй Кусакабэ",
+      "categories": [
+        "Национальный ансамбль",
+        "Танцевальный коллектив",
+        "Шоу-программа"
+      ],
+      "city": "Алматы",
+      "city_imputed": true,
+      "synthetic": false,
+      "price_from_kzt": 400000,
+      "price_imputed": false,
+      "event_formats": [
+        "той",
+        "свадьба",
+        "юбилей"
+      ],
+      "languages": [
+        "казахский"
+      ],
+      "max_hours": 2,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-14",
+        "2026-10-19",
+        "2026-10-24",
+        "2026-10-27",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-13",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-21",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Творческий коллектив Sakura Dala — духовная, энергичная команда джигитов. Sakura Dala, снискавший народную любовь, готов выступить на вашем торжестве! Если хотите превратить своё торжество в настоящий духовный праздник и подарить гостям незабываемые впечатления — свяжитесь с нами!"
+    },
+    {
+      "id": "HK-90001",
+      "anon_name": "Тихиро Огино",
+      "categories": [
+        "Флорист"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 250000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "юбилей",
+        "той"
+      ],
+      "languages": [
+        "русский",
+        "казахский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-05",
+        "2026-10-07",
+        "2026-10-10",
+        "2026-10-16",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-23",
+        "2026-11-01",
+        "2026-11-03",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-21",
+        "2026-11-26",
+        "2026-11-30",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30"
+      ],
+      "description": "White Sakura Studio — авторская флористика для свадеб и юбилеев. Работаем с сезонными и привозными цветами, собираем композиции под цветовую палитру мероприятия — от букета невесты до оформления стола молодожёнов."
+    },
+    {
+      "id": "HK-90002",
+      "anon_name": "Хаку",
+      "categories": [
+        "Флорист"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 300000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "юбилей",
+        "свадьба"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-15",
+        "2026-10-18",
+        "2026-10-21",
+        "2026-10-23",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-05",
+        "2026-11-07",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-19",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-27",
+        "2026-12-02",
+        "2026-12-04",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Ирис Botanica — флористическое оформление корпоративных и частных событий: welcome-зоны, президиумы, фотозоны. Предлагаем композиции в разных стилях, от минимализма до пышного декора."
+    },
+    {
+      "id": "HK-90003",
+      "anon_name": "Усопп",
+      "categories": [
+        "Декоратор"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 1800000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-10-01",
+        "2026-10-03",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-14",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-12-01",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-31"
+      ],
+      "description": "Concept Lumen — световые и объёмные инсталляции для свадеб и корпоративных мероприятий: неоновые вывески, шар-гирлянды, тканевый декор потолка. Работаем под ключ: проект, монтаж, демонтаж."
+    },
+    {
+      "id": "HK-90004",
+      "anon_name": "Франки",
+      "categories": [
+        "Декоратор"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 2200000,
+      "price_imputed": false,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "свадьба"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-24",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-07",
+        "2026-10-09",
+        "2026-10-14",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-22",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-05",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Студия Каркас — сценография и декор больших мероприятий: подиумы, арки, фотозоны на металлокаркасе. Берём проекты премиум-уровня с индивидуальным эскизом под концепцию клиента."
+    },
+    {
+      "id": "HK-90005",
+      "anon_name": "Виолетта Эвергарден",
+      "categories": [
+        "Подарки и сувениры"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 120000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "юбилей"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-12",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-17",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-07",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-31"
+      ],
+      "description": "Letters & Sweets — именные открытки и подарочные наборы для гостей мероприятия: карточки рассадки, welcome-боксы, сладости с индивидуальным дизайном под тематику события."
+    },
+    {
+      "id": "HK-90006",
+      "anon_name": "Лойд Форджер",
+      "categories": [
+        "Подарки и сувениры"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 100000,
+      "price_imputed": true,
+      "event_formats": [
+        "корпоратив",
+        "конференция"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": null,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-26",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-11",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-10-30",
+        "2026-11-01",
+        "2026-11-03",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-16",
+        "2026-11-18",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-24",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Print & Magnet Craft — брендированный мерч и сувениры для корпоративных мероприятий: фотомагниты, значки, блокноты с логотипом компании. Минимальный тираж от 20 штук."
+    },
+    {
+      "id": "HK-90007",
+      "anon_name": "Субару Нацуки",
+      "categories": [
+        "Ведущий церемонии"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 250000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 3,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-06",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-20",
+        "2026-10-23",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-28",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-08",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-16",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-31"
+      ],
+      "description": "Провожу выездную регистрацию и церемонию бракосочетания на казахском и русском языках. Работаю по сценарию пары, без шаблонных фраз — каждая церемония собирается индивидуально под историю молодожёнов."
+    },
+    {
+      "id": "HK-90008",
+      "anon_name": "Рем",
+      "categories": [
+        "Ведущий церемонии"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 220000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 3,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-10-08",
+        "2026-10-10",
+        "2026-10-15",
+        "2026-10-18",
+        "2026-10-21",
+        "2026-10-23",
+        "2026-10-27",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-14",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-25",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "description": "Церемониймейстер выездных регистраций брака. Спокойная, тёплая подача, помогаю паре и гостям прожить церемонию без спешки и лишнего пафоса."
+    },
+    {
+      "id": "HK-90009",
+      "anon_name": "Кадзума Сато",
+      "categories": [
+        "Фото и видеобудки"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 300000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-30",
+        "2026-10-02",
+        "2026-10-04",
+        "2026-10-08",
+        "2026-10-10",
+        "2026-10-12",
+        "2026-10-16",
+        "2026-10-22",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-11-04",
+        "2026-11-08",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-20",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Instant Frame Booth — интерактивная фотобудка с мгновенной печатью снимков и брендированной рамкой. Подходит для свадеб и корпоративных мероприятий, аренда от 3 часов."
+    },
+    {
+      "id": "HK-90010",
+      "anon_name": "Аква",
+      "categories": [
+        "Фото и видеобудки"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 280000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "корпоратив",
+        "день рождения"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 6,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-27",
+        "2026-09-29",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-13",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-05",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-16",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-24",
+        "2026-11-26",
+        "2026-11-28",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Magic Mirror Photo — зеркальная фотобудка с сенсорным экраном, анимацией и печатью фото. Гости взаимодействуют с зеркалом как с интерактивным гостем праздника."
+    },
+    {
+      "id": "HK-90011",
+      "anon_name": "Гохан",
+      "categories": [
+        "Банкетный зал",
+        "Отель",
+        "Ресторан"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 3200000,
+      "price_imputed": true,
+      "event_formats": [
+        "свадьба",
+        "той",
+        "корпоратив",
+        "юбилей"
+      ],
+      "languages": [
+        "казахский",
+        "русский"
+      ],
+      "max_hours": 8,
+      "busy_dates": [
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-28",
+        "2026-10-03",
+        "2026-10-07",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-14",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-25",
+        "2026-10-29",
+        "2026-10-31",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-22",
+        "2026-11-26",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Grand Sora Hotel – отель с банкетным залом и рестораном в центре Алматы. Панорамные окна, вместимость зала до 200 гостей, свой кейтеринг и парковка для гостей мероприятия."
+    },
+    {
+      "id": "HK-90012",
+      "anon_name": "Веджита",
+      "categories": [
+        "Банкетный зал",
+        "Отель"
+      ],
+      "city": "Астана",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 2800000,
+      "price_imputed": true,
+      "event_formats": [
+        "корпоратив",
+        "конференция",
+        "свадьба",
+        "юбилей"
+      ],
+      "languages": [
+        "русский",
+        "английский"
+      ],
+      "max_hours": 10,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-27",
+        "2026-09-29",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-05",
+        "2026-10-11",
+        "2026-10-13",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-21",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-21",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-21",
+        "2026-12-24",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "description": "Skyline Crown Hotel – отель делового класса с двумя банкетными залами разной вместимости. Подходит для корпоративных конференций, свадеб и юбилеев, есть техническое оснащение для презентаций."
+    },
+    {
+      "id": "HK-90013",
+      "anon_name": "Ямча",
+      "categories": [
+        "Инструменталист"
+      ],
+      "city": "Алматы",
+      "city_imputed": false,
+      "synthetic": true,
+      "price_from_kzt": 400000,
+      "price_imputed": false,
+      "event_formats": [
+        "свадьба",
+        "корпоратив"
+      ],
+      "languages": [
+        "русский"
+      ],
+      "max_hours": 3,
+      "busy_dates": [
+        "2026-09-25",
+        "2026-09-27",
+        "2026-09-29",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-06",
+        "2026-10-08",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-14",
+        "2026-10-17",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-25",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-05",
+        "2026-11-09",
+        "2026-11-11",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-21",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-28",
+        "2026-12-30"
+      ],
+      "description": "Сольные выступления на скрипке и саксофоне для свадебных церемоний, романтических ужинов и welcome-зон корпоративных мероприятий. Репертуар — от классики до современных кавер-аранжировок."
+    }
+  ],
+  "facts": {
+    "HK-39372": {
+      "kk": "ай сайын 1000-нан астам гүл безендіру тапсырысын орындайды",
+      "source": "Ежемесячно реализуем более 1000 заказов."
+    },
+    "HK-44733": {
+      "kk": "10 жылдан астам тәжірибесі бар; 8 адамдық кештен 3000 адамдық бизнес форумға дейін жүргізген",
+      "source": "Ведущий мероприятий с опытом работы более 10 лет. Стиль ведения интеллигентный, не напряжный, атмосферный. Веду как ламповые вечера от 8 человек, так и крупные бизнес форумы на 3000 человек."
+    },
+    "HK-80581": {
+      "kk": "Improv Konoha импровизаторлар клубының резиденті және вокалмен айналысады",
+      "source": "Резидент клуба импровизаторов Improv Konoha •Обладаю приятным тембром голоса и владею вокалом"
+    },
+    "HK-88430": {
+      "kk": "корпоративтік шаралар, салтанатты кештер мен іскерлік кездесулерді жүргізуге маманданған",
+      "source": "Специализируюсь на проведении корпоративных мероприятий, торжеств и деловых встреч."
+    },
+    "HK-58385": {
+      "kk": "«Шоу Ghibli Импровизация» байқауында екі рет жеңгенін көрсеткен",
+      "source": "двухкратный победитель «Шоу Ghibli Импровизация»"
+    },
+    "HK-42352": {
+      "kk": "13 жыл бойы үйлену тойларын жүргізген, Алматы, Мәскеу, Дубай, Бодрум және Ташкентте жұмыс істеген",
+      "source": "Опыт ведения свадеб 13 лет Вел свадьбы в Алматы, Москве, Дубае, Бодруме, Ташкенте"
+    },
+    "HK-37181": {
+      "kk": "15 жылдан астам тәжірибесі бар, импровизация мен интерактивтерді қолданады",
+      "source": "ВЕДУ МЕРОПРИЯТИЯ УЖЕ БОЛЕЕ 15 ЛЕТ. ОСНОВНЫЕ СТИЛИ ВЕДЕНИЯ МЕРОПРИЯТИЙ – ДИНАМИКА, ИМПРОВИЗАЦИЯ, ИНТЕРАКТИВЫ."
+    },
+    "HK-26808": {
+      "kk": "КВН Жоғары лигасы командасының сценарисі әрі «Ghibli Stand-Up» клубының негізін қалаушы",
+      "source": "Сценарист команды КВН Высшей лиги Резидент и основатель клуба «Ghibli Stand-Up»"
+    },
+    "HK-76268": {
+      "kk": "AniWed Rating нұсқасы бойынша Алматының үздік бес фотографына кіретінін көрсеткен",
+      "source": "Вхожу в топ 5 Алматы по версии AniWed Rating."
+    },
+    "HK-10990": {
+      "kk": "сипаттамасында «colorist of the year 2025» атағы көрсетілген",
+      "source": "-colorist of the year 2025 🏆"
+    },
+    "HK-61323": {
+      "kk": "үйлену тойының фотожурналистикасы мен деректі түсіріліміне басымдық береді",
+      "source": "Последние годы больше внимание уделяю таким жанрам, как свадебный фотожурнализм, документально — свадебный фотожурнализм."
+    },
+    "HK-74914": {
+      "kk": "үйлену тойларының видеографы ретінде бүкіл Қазақстан бойынша жұмыс істейді",
+      "source": "Я свадебный видеограф из Астаны. Работаю по всему Казахстану."
+    },
+    "HK-30583": {
+      "kk": "Франциядағы сән апталығын түсірген; Италия, Ұлыбритания және басқа елдерде түсірілім жасаған",
+      "source": "География моих съемок: Франция(fashion week), Италия, Великобритания, Турция, Грузия, ОАЭ, Азербайджан и тд."
+    },
+    "HK-97737": {
+      "kk": "студияда да, сыртқы локацияларда да түсіреді",
+      "source": "Работаю как в студии, так и на выездных локациях"
+    },
+    "HK-98562": {
+      "kk": "шағын шаралардан ауқымды үйлену тойларына дейін 80-нен астам іс-шараны түсірген",
+      "source": "Сняла более 80 мероприятий — от камерных мероприятий до масштабных свадеб."
+    },
+    "HK-53108": {
+      "kk": "шамамен жеті жылдық тәжірибесі бар, Париж, Дубай, Мәскеу мен Қытайда түсірген",
+      "source": "Я фотограф и уже около семи лет я ловлю моменты, которые обычно проходят незаметно. Я снимал в разных городах и странах — Париже, Дубае, Москве, Китае."
+    },
+    "HK-11484": {
+      "kk": "авторлық эскиз дайындайды және безендіру конструкцияларын өзі өндіреді",
+      "source": "авторские эскизы перед реализацией собственное производство конструкций"
+    },
+    "HK-97041": {
+      "kk": "қазақша және орысша 12 жыл жүргізген, Челябинск пен Мәскеудегі жүргізушілер мектебінің резиденті",
+      "source": "Тэнъя ведёт 12 лет на каз/рус языках , современно, интеллигентно , с юмором ! TOP 7 лучших ведущих KZ по мнению @aniwed.kz.Так же является резидентом школы Ведущих в г.Челябинск , г.Москва."
+    },
+    "HK-60927": {
+      "kk": "жеке дизайндағы қантсыз кәмпиттер шығарады",
+      "source": "Konpeito Craft — производство леденцов без сахара с индивидуальным дизайном для ваших значимых событий."
+    },
+    "HK-62242": {
+      "kk": "Жапония, Италия, Грузия, Дубай, Мәскеу және Қазақстанда видео түсірген",
+      "source": "Юдзи работал в Японии, Италии, Грузии, Дубае, Москве и Казахстане."
+    },
+    "HK-44923": {
+      "kk": "бағдарламасында DJ, заманауи би музыкасы және мультимедиа жабдығы көрсетілген",
+      "source": "DJ и современная танцевальная музыка и мультимедийное оборудование"
+    },
+    "HK-91112": {
+      "kk": "қойылымдық позадан гөрі адамның күйін, көзқарасын, жанасуы мен толқуын түсіруге мән береді",
+      "source": "Мои кадры — не про позы, а про состояние. Мне важно, чтобы на фотографиях оставалась жизнь: взгляд, пауза, прикосновение, волнение."
+    },
+    "HK-77793": {
+      "kk": "рәсім жүргізушісі ретінде қазақша және орысша жұмыс істейді",
+      "source": "Ведущая и церемониймейстер Спайк Спигел! — Ведение на казахском и русском языках"
+    },
+    "HK-76335": {
+      "kk": "табиғи эмоциялар мен оқиғаның негізгі сәттерін түсіруге мән береді",
+      "source": "В её кадрах — живые эмоции, естественность и аккуратная эстетика, позволяющая сохранить атмосферу события и его ключевые моменты."
+    },
+    "HK-20640": {
+      "kk": "шараның ұсақ бөлшектері мен көңіл күйін сақтауға мән береді",
+      "source": "Его работы — это внимание к деталям, живые эмоции и аккуратная, эстетичная подача, которая сохраняет атмосферу события и его настроение."
+    },
+    "HK-16628": {
+      "kk": "үйлену тойы мен репортаж түсіріліміне маманданған, Қазақстанда және шетелде жұмыс істейді",
+      "source": "Является свадебным и репортажным фотографом, умеет ловить живые эмоции и передавать атмосферу события через искренние, естественные кадры. Работает по всему Казахстану и за рубежом"
+    },
+    "HK-68220": {
+      "kk": "30 мың көрермені бар «Тенгри Саунд» концертін түсіргенін көрсеткен",
+      "source": "Концерт «Тенгри Саунд» с 30 тыс зрителей."
+    },
+    "HK-74147": {
+      "kk": "аспаптық музыканы дуэт болып орындайды",
+      "source": "Инуяша и Кагоме — музыкальный дуэт премиум-класса, инструменталисты"
+    },
+    "HK-35913": {
+      "kk": "10 жылдан астам тәжірибесі бар және 1000-нан астам түсірілім жасаған",
+      "source": "Тохру — ивент-фотограф с более чем 10-летним опытом и более 1000 реализованных съёмок."
+    },
+    "HK-46450": {
+      "kk": "контрабас қосылған авторлық орындауда классика, этника және джазды біріктіреді",
+      "source": "Его визитная карточка — узнаваемое авторское звучание с контрабасом, где классика, этника и джазовые стандарты соединяются в уникальной манере исполнения."
+    },
+    "HK-25279": {
+      "kk": "қысқа сипаттамасында сахнадағы дыбысқа, энергияға және атмосфераға мән беретінін айтады",
+      "source": "звуком, энергией и атмосферой, которую создаём на сцене"
+    },
+    "HK-92824": {
+      "kk": "Ичиго мен Рукияның ән өнеріне арналған авторлық ансамбль жобасы",
+      "source": "Авторский проект Ичиго и Рукии Гармония песни и красоты Ансамбль Sailor Dala"
+    },
+    "HK-36965": {
+      "kk": "қазақ әнін орындайтынын сипаттамасында көрсеткен",
+      "source": "Выступаем на вашем торжестве Прославляем казахскую песню на весь мир"
+    },
+    "HK-39301": {
+      "kk": "Ичиго мен Рукияның жобасы ретінде мемлекет басшысының алдында өнер көрсеткенін айтады",
+      "source": "Авторский проект Ичиго и Рукии, впервые выступивший перед главой государства"
+    },
+    "HK-45928": {
+      "kk": "үйлену тойы, отбасылық және жарнамалық видео түсіруге маманданған",
+      "source": "Он специализируется на свадебной, семейной и рекламной съёмке"
+    },
+    "HK-83709": {
+      "kk": "құрамында төрт вокалист, ішекті квартет және үрмелі аспаптар тобы бар",
+      "source": "Большой музыкальный состав: 4 вокалиста, струнный квартет, духовой брасс"
+    },
+    "HK-23752": {
+      "kk": "кеңейтілген құрамында екі ер вокалист, бір әйел вокалист, труба, саксофон және тромбон бар",
+      "source": "Расширенный состав Thunder Breath Band: 🎤 два вокалиста 🎤 вокалистка 🥁 барабанщик 🎸 бас-гитарист 🎸 соло-гитарист 🎺 труба 🎷 саксофон 🎵 тромбон"
+    },
+    "HK-31819": {
+      "kk": "үлкен концерт алаңдары, ашық аспан астындағы шаралар және шағын клубтарда ойнайды",
+      "source": "Группа одинаково хорошо звучит как на больших концертных площадках и open-air’ах, так и в маленьких уютных клубах."
+    },
+    "HK-57480": {
+      "kk": "музыкалық қойылымға хореография мен көрермендермен белсенді қарым-қатынасты қосады",
+      "source": "Профессиональный коллектив, который превращает каждое выступление в яркий перформанс с мощной энергетикой, хореографией и активным взаимодействием с публикой."
+    },
+    "HK-35215": {
+      "kk": "тұсаукесер, шілдехана, ас және еске алу жиындарын да жүргізеді",
+      "source": "Ведёт все форматы: свадьбы, проводы невесты, обряд первых шагов, праздник в честь новорождённого, поминальный обед, памятные годовщины"
+    },
+    "HK-77838": {
+      "kk": "театр және кино актері, актерлік шеберлік оқытушысы әрі этно-рок тобының солисі",
+      "source": "Он — актёр театра и кино, педагог по актёрскому мастерству театральной академии искусств, солист этно-рок группы «Тенгри Rock»"
+    },
+    "HK-72938": {
+      "kk": "КВН Жоғары лигасындағы «Ghibli Микс» командасының мүшесі және актер",
+      "source": "Ведущий, актер, участник КВН команды «Ghibli Микс» — Высшая лига."
+    },
+    "HK-27222": {
+      "kk": "тележүргізушіліктен бастаған, ірі медиа мен ауқымды іс-шараларда жұмыс істеген",
+      "source": "Начав карьеру на телевидении, Гоку стал голосом крупнейших медиа Казахстана и постоянным ведущим масштабных событий."
+    },
+    "HK-75012": {
+      "kk": "Digital Sakura Almaty амбассадоры әрі Formula 1 медиабағдарламаларының қатысушысы",
+      "source": "Амбассадор Digital Sakura Almaty, участник медиапрограмм Formula 1"
+    },
+    "HK-29829": {
+      "kk": "бағдарламасын ұзақ сөздерден гөрі ойын-сауық пен биге құрады",
+      "source": "Без долгих речей и наставлений на ивентах. Только развлечения и танцы."
+    },
+    "HK-35846": {
+      "kk": "15 жылдан астам жұмыс істейді; жарық және пиксельдік шоу, интерактивті фото/видеозоналар ұсынады",
+      "source": "Компания на рынке более 15 лет. 3 основных направления: Встреча гостей; Световые и пиксельные шоу; Интерактивные фото/видеозоны."
+    },
+    "HK-64395": {
+      "kk": "қала мен тауға қарайтын панорамалық көрінісі және террасалары бар",
+      "source": "Nerima Terrace – стильная панорамная локация в Алматы с захватывающим видом на город и горы. Пространство сочетает современную атмосферу, уютные террасы"
+    },
+    "HK-72785": {
+      "kk": "Sakura Tower мұнарасында орналасқан, тауға және қалаға панорамалық көрінісі бар",
+      "source": "Fuyuki Grand – один из самых роскошных отелей Алматы с панорамными видами на горы и город, расположенный в башне Sakura Tower."
+    },
+    "HK-99701": {
+      "kk": "мейрамхана кешені мен кең жасыл алаңдары бар гольф курорты",
+      "source": "Ouran Golf Club – премиальный гольф-курорт и ресторанный комплекс в Алматы с живописными панорамами гор, просторными зелёными полями"
+    },
+    "HK-58236": {
+      "kk": "қазақ асханасын ұсынады, интерьері киіз үй үлгісімен жасалған",
+      "source": "Наусикая – атмосферный ресторан национальной казахской кухни на вершине городской горы с панорамным видом на Алматы и горы. Интерьер вдохновлён традиционной юртой и украшен национальными мотивами"
+    },
+    "HK-50695": {
+      "kk": "итальяндық және Жерорта теңізі асханасын ұсынады",
+      "source": "Villa Cavallone – элегантный ресторан итальянской и средиземноморской кухни"
+    },
+    "HK-69010": {
+      "kk": "террасасы бар, еуропалық және азиялық асхананы ұсынады",
+      "source": "отдыха на террасе с красивым видом и европейско-азиатской кухней"
+    },
+    "HK-19103": {
+      "kk": "жігіттерден құралған шығармашылық ұжым ретінде таныстырылған",
+      "source": "Творческий коллектив Sakura Dala — духовная, энергичная команда джигитов."
+    },
+    "HK-90001": {
+      "kk": "маусымдық және сырттан әкелінген гүлдермен іс-шараның түстеріне сай композиция жасайды",
+      "source": "Работаем с сезонными и привозными цветами, собираем композиции под цветовую палитру мероприятия"
+    },
+    "HK-90002": {
+      "kk": "қонақтарды қарсы алу аймағын, төрді және фотозоналарды гүлмен безендіреді",
+      "source": "флористическое оформление корпоративных и частных событий: welcome-зоны, президиумы, фотозоны"
+    },
+    "HK-90003": {
+      "kk": "неон жазулар, шар гирляндалары мен төбеге арналған маталы декор жасайды",
+      "source": "неоновые вывески, шар-гирлянды, тканевый декор потолка"
+    },
+    "HK-90004": {
+      "kk": "металл қаңқалы подиум, арка және фотозона жасайды",
+      "source": "сценография и декор больших мероприятий: подиумы, арки, фотозоны на металлокаркасе"
+    },
+    "HK-90005": {
+      "kk": "қонақтарға арналған атаулы ашықхаттар, отырғызу карточкалары мен сыйлық жиынтықтарын дайындайды",
+      "source": "именные открытки и подарочные наборы для гостей мероприятия: карточки рассадки, welcome-боксы"
+    },
+    "HK-90006": {
+      "kk": "фотомагнит, төсбелгі және логотипті блокнот шығарады; ең аз тапсырыс — 20 дана",
+      "source": "фотомагниты, значки, блокноты с логотипом компании. Минимальный тираж от 20 штук."
+    },
+    "HK-90007": {
+      "kk": "неке рәсімін жұптың өз тарихына негізделген жеке сценариймен жүргізеді",
+      "source": "Работаю по сценарию пары, без шаблонных фраз — каждая церемония собирается индивидуально под историю молодожёнов."
+    },
+    "HK-90008": {
+      "kk": "неке рәсімін асықпай, сабырлы әрі жылы мәнерде жүргізетінін көрсеткен",
+      "source": "Спокойная, тёплая подача, помогаю паре и гостям прожить церемонию без спешки и лишнего пафоса."
+    },
+    "HK-90009": {
+      "kk": "фотосуреттерді бірден басып шығаратын және брендтелген жақтау қосатын фотобудка ұсынады",
+      "source": "интерактивная фотобудка с мгновенной печатью снимков и брендированной рамкой"
+    },
+    "HK-90010": {
+      "kk": "сенсорлық экраны, анимациясы және фото басып шығару мүмкіндігі бар айна фотобудка ұсынады",
+      "source": "зеркальная фотобудка с сенсорным экраном, анимацией и печатью фото"
+    },
+    "HK-90011": {
+      "kk": "залы 200 қонаққа дейін сыяды, өз кейтерингі мен қонақтарға арналған тұрағы бар",
+      "source": "вместимость зала до 200 гостей, свой кейтеринг и парковка для гостей мероприятия"
+    },
+    "HK-90012": {
+      "kk": "сыйымдылығы әртүрлі екі банкет залы және презентацияға арналған техникалық жабдығы бар",
+      "source": "отель делового класса с двумя банкетными залами разной вместимости. Подходит для корпоративных конференций, свадеб и юбилеев, есть техническое оснащение для презентаций."
+    },
+    "HK-90013": {
+      "kk": "скрипка мен саксофонда жеке өнер көрсетеді, репертуарында классика және заманауи каверлер бар",
+      "source": "Сольные выступления на скрипке и саксофоне для свадебных церемоний, романтических ужинов и welcome-зон корпоративных мероприятий. Репертуар — от классики до современных кавер-аранжировок."
+    }
+  },
+  "options": {
+    "cities": [
+      {
+        "value": "Алматы",
+        "label": "Алматы"
+      },
+      {
+        "value": "Астана",
+        "label": "Астана"
+      },
+      {
+        "value": "Зарубежье",
+        "label": "Шетел"
+      }
+    ],
+    "categories": [
+      {
+        "value": "Ведущий",
+        "label": "Іс-шара жүргізушісі"
+      },
+      {
+        "value": "Ведущий церемонии",
+        "label": "Рәсім жүргізушісі"
+      },
+      {
+        "value": "Фотограф",
+        "label": "Фотограф"
+      },
+      {
+        "value": "Видеограф",
+        "label": "Бейнеоператор"
+      },
+      {
+        "value": "Флорист",
+        "label": "Флорист"
+      },
+      {
+        "value": "Декоратор",
+        "label": "Безендіруші"
+      },
+      {
+        "value": "Подарки и сувениры",
+        "label": "Сыйлықтар мен кәдесыйлар"
+      },
+      {
+        "value": "Инструменталист",
+        "label": "Аспапта орындаушы"
+      },
+      {
+        "value": "Лайв-бэнд",
+        "label": "Жанды музыка тобы"
+      },
+      {
+        "value": "Национальный ансамбль",
+        "label": "Ұлттық ансамбль"
+      },
+      {
+        "value": "Танцевальный коллектив",
+        "label": "Би ұжымы"
+      },
+      {
+        "value": "Шоу-программа",
+        "label": "Шоу-бағдарлама"
+      },
+      {
+        "value": "Фото и видеобудки",
+        "label": "Фото және бейнебудкалар"
+      },
+      {
+        "value": "Банкетный зал",
+        "label": "Банкет залы"
+      },
+      {
+        "value": "Загородная площадка",
+        "label": "Қала сыртындағы алаң"
+      },
+      {
+        "value": "Ресторан",
+        "label": "Мейрамхана"
+      },
+      {
+        "value": "Отель",
+        "label": "Қонақүй"
+      }
+    ],
+    "events": [
+      {
+        "value": "свадьба",
+        "label": "Үйлену тойы"
+      },
+      {
+        "value": "той",
+        "label": "Той"
+      },
+      {
+        "value": "корпоратив",
+        "label": "Корпоратив"
+      },
+      {
+        "value": "конференция",
+        "label": "Конференция"
+      },
+      {
+        "value": "юбилей",
+        "label": "Мерейтой"
+      },
+      {
+        "value": "день рождения",
+        "label": "Туған күн"
+      }
+    ],
+    "languages": [
+      {
+        "value": "казахский",
+        "label": "Қазақша"
+      },
+      {
+        "value": "русский",
+        "label": "Орысша"
+      },
+      {
+        "value": "английский",
+        "label": "Ағылшынша"
+      }
+    ],
+    "min_date": "2026-09-23",
+    "max_date": "2026-12-31",
+    "total": 66,
+    "flags": {
+      "synthetic": 13,
+      "city_imputed": 8,
+      "price_imputed": 18
+    }
+  },
+  "labels": {
+    "categories": {
+      "Ведущий": "Іс-шара жүргізушісі",
+      "Ведущий церемонии": "Рәсім жүргізушісі",
+      "Фотограф": "Фотограф",
+      "Видеограф": "Бейнеоператор",
+      "Флорист": "Флорист",
+      "Декоратор": "Безендіруші",
+      "Подарки и сувениры": "Сыйлықтар мен кәдесыйлар",
+      "Инструменталист": "Аспапта орындаушы",
+      "Лайв-бэнд": "Жанды музыка тобы",
+      "Национальный ансамбль": "Ұлттық ансамбль",
+      "Танцевальный коллектив": "Би ұжымы",
+      "Шоу-программа": "Шоу-бағдарлама",
+      "Фото и видеобудки": "Фото және бейнебудкалар",
+      "Банкетный зал": "Банкет залы",
+      "Загородная площадка": "Қала сыртындағы алаң",
+      "Ресторан": "Мейрамхана",
+      "Отель": "Қонақүй"
+    },
+    "cities": {
+      "Алматы": "Алматы",
+      "Астана": "Астана",
+      "Зарубежье": "Шетел"
+    },
+    "events": {
+      "свадьба": "Үйлену тойы",
+      "той": "Той",
+      "корпоратив": "Корпоратив",
+      "конференция": "Конференция",
+      "юбилей": "Мерейтой",
+      "день рождения": "Туған күн"
+    },
+    "languages": {
+      "казахский": "Қазақша",
+      "русский": "Орысша",
+      "английский": "Ағылшынша"
+    }
+  },
+  "reason_labels": {
+    "busy": "Таңдалған күні бос емес",
+    "budget": "Бастапқы бағасы бюджеттен жоғары",
+    "event": "Іс-шара түрін қабылдамайды",
+    "language": "Таңдалған тіл көрсетілмеген",
+    "duration": "Ұзақтық шегінен асады"
+  }
+}
+</script>
+
+<!-- 4. ІРІКТЕУ ЖӘНЕ ИНТЕРФЕЙС: JAVASCRIPT -->
+<script>
+"use strict";
+// 3-бөлімдегі нақты каталог: желіден ешбір дерек жүктелмейді.
+const DATA = JSON.parse(document.getElementById("catalog-data").textContent);
+const LABELS = DATA.labels;
+const REASON_LABELS = DATA.reason_labels;
+const MIN_DATE = DATA.options.min_date;
+const MAX_DATE = DATA.options.max_date;
+
+// ІРІКТЕУ ЕРЕЖЕЛЕРІ
+// Іріктеу CSV деректерінен орындалады. AI, кездейсоқтық және желі қолданылмайды.
+function hasLabel(labels, key) {
+  return typeof key === 'string' && Object.prototype.hasOwnProperty.call(labels, key);
+}
+function money(value) {
+  return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+function dayLabel(value) { return value.split('-').reverse().join('.'); }
+function validDate(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(value + 'T00:00:00.000Z');
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value && value >= MIN_DATE && value <= MAX_DATE;
+}
+// Python-ның {:g} пішімі: алты мәнді цифр, қажет болса экспонента.
+function numberG(value) {
+  const [mantissa, exponentText] = value.toExponential(5).split('e');
+  const exponent = Number(exponentText);
+  if (exponent < -4 || exponent >= 6) {
+    return mantissa.replace(/\.?0+$/, '') + 'e' + (exponent < 0 ? '-' : '+') + String(Math.abs(exponent)).padStart(2, '0');
+  }
+  return String(Number(mantissa + 'e' + exponent));
+}
+function validateRequest(raw) {
+  if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) {
+    throw new Error('Сұраныс нысан түрінде берілуі керек.');
+  }
+  const allowed = new Set(['city', 'date', 'category', 'event', 'budget', 'language', 'hours']);
+  if (Object.keys(raw).some(key => !allowed.has(key))) throw new Error('Сұраныста белгісіз өріс бар.');
+  const query = {};
+  for (const [key, labels, label] of [['city', LABELS.cities, 'Қаланы'], ['category', LABELS.categories, 'Санатты'], ['event', LABELS.events, 'Іс-шара түрін']]) {
+    if (!hasLabel(labels, raw[key])) throw new Error(label + ' тізімнен таңдаңыз.');
+    query[key] = raw[key];
+  }
+  if (!validDate(raw.date)) throw new Error('Күнді 23.09.2026–31.12.2026 аралығынан таңдаңыз.');
+  query.date = raw.date;
+  if (!Number.isSafeInteger(raw.budget) || raw.budget < 0) throw new Error('Бюджетті 0 немесе одан үлкен бүтін теңгемен жазыңыз.');
+  query.budget = raw.budget;
+  const language = raw.language ?? null;
+  if (language !== null && (typeof language !== 'string' || (language !== '' && !hasLabel(LABELS.languages, language)))) {
+    throw new Error('Тілді тізімнен таңдаңыз немесе бос қалдырыңыз.');
+  }
+  query.language = language || null;
+  const hours = raw.hours ?? null;
+  if (hours !== null && (typeof hours !== 'number' || !Number.isFinite(hours) || hours <= 0 || hours > Number.MAX_SAFE_INTEGER)) {
+    throw new Error('Ұзақтық оң сан болуы керек; қажет болмаса, бос қалдырыңыз.');
+  }
+  query.hours = hours;
+  return query;
+}
+function rejectionReasons(profile, query) {
+  const reasons = [];
+  if (profile.busy_dates.includes(query.date)) reasons.push({code: 'busy', detail: dayLabel(query.date) + ' күні каталогта бос емес деп белгіленген.'});
+  if (profile.price_from_kzt > query.budget) reasons.push({code: 'budget', detail: `${money(profile.price_from_kzt)} теңгеден бастап; бюджет — ${money(query.budget)} теңге.`});
+  if (!profile.event_formats.includes(query.event)) reasons.push({code: 'event', detail: `«${LABELS.events[query.event]}» түрі профильде көрсетілмеген.`});
+  if (query.language && !profile.languages.includes(query.language)) reasons.push({code: 'language', detail: `${LABELS.languages[query.language]} жұмыс істеуі профильде көрсетілмеген.`});
+  if (query.hours !== null && profile.max_hours !== null && query.hours > profile.max_hours) reasons.push({code: 'duration', detail: `Сұралғаны — ${numberG(query.hours)} сағат; профиль шегі — ${profile.max_hours} сағат.`});
+  return reasons;
+}
+function explain(profile, query, fact) {
+  const distinctive = `Профиль сипаттамасы бойынша, ${fact.kk.replace(/[. ]+$/, '')}.`;
+  const checks = [
+    `«${LABELS.events[query.event]}» түрін қабылдайды`,
+    `${money(profile.price_from_kzt)} теңгеден басталатын бағасы ${money(query.budget)} теңге бюджетке сыяды`,
+    `${dayLabel(query.date)} күні бос емес деп белгіленбеген`,
+  ];
+  if (query.language) checks.push(`${LABELS.languages[query.language].toLowerCase()} жұмыс істейді`);
+  if (profile.max_hours === null) checks.push('бұл қызметке алаңда болу ұзақтығы қолданылмайды');
+  else if (query.hours !== null) checks.push(`${numberG(query.hours)} сағат сұраныс ${profile.max_hours} сағаттық шегіне сыяды`);
+  return distinctive + ' ' + checks.join('; ') + '.';
+}
+function compareId(a, b) { return a.id < b.id ? -1 : a.id > b.id ? 1 : 0; }
+function matchProfiles(profiles, facts, raw) {
+  const query = validateRequest(raw);
+  const candidates = profiles.filter(profile => profile.city === query.city && profile.categories.includes(query.category)).sort(compareId);
+  const accepted = [], rejected = [], counts = Object.create(null);
+  for (const profile of candidates) {
+    const reasons = rejectionReasons(profile, query);
+    if (reasons.length) {
+      rejected.push({id: profile.id, name: profile.anon_name, reasons});
+      for (const reason of reasons) counts[reason.code] = (counts[reason.code] || 0) + 1;
+    } else accepted.push(profile);
+  }
+  accepted.sort((a, b) => a.price_from_kzt - b.price_from_kzt || compareId(a, b));
+  const cards = accepted.slice(0, 3).map(profile => {
+    const fact = facts[profile.id];
+    return {
+      id: profile.id, name: profile.anon_name,
+      category: LABELS.categories[query.category],
+      categories: profile.categories.map(category => LABELS.categories[category]),
+      city: LABELS.cities[profile.city], price_from_kzt: profile.price_from_kzt,
+      price_label: money(profile.price_from_kzt) + ' теңгеден бастап',
+      languages: profile.languages.map(language => LABELS.languages[language]), max_hours: profile.max_hours,
+      explanation: explain(profile, query, fact), evidence: fact.source,
+      flags: {synthetic: profile.synthetic, city_imputed: profile.city_imputed, price_imputed: profile.price_imputed},
+    };
+  });
+  const status = !candidates.length ? 'no_category' : cards.length ? 'matched' : 'no_match';
+  let title, message;
+  if (status === 'no_category') {
+    title = 'Бұл қалада мұндай санат жоқ';
+    message = `${LABELS.cities[query.city]} қаласы / «${LABELS.categories[query.category]}»: каталогта бірде-бір профиль жоқ. Қаланы немесе санатты өзгертіңіз.`;
+  } else if (status === 'no_match') {
+    title = 'Профильдер бар, бірақ шарттардан өтпеді';
+    message = `Қала мен санатқа сәйкес ${candidates.length} профильдің ешқайсысы барлық шарттан өтпеді. Төмендегі себептерге қарай шарттарды өзгертіп көріңіз.`;
+  } else {
+    title = 'Сәйкес профильдер табылды';
+    if (accepted.length < 3) {
+      if (rejected.length) message = `${candidates.length} профильдің ${accepted.length}-і сәйкес келді, ${rejected.length}-і шарттардан өтпеді. Сондықтан ${cards.length} карточка көрсетілді.`;
+      else message = `Бұл қалада осы санат бойынша бар болғаны ${candidates.length} профиль бар; барлығы шарттарға сай. Сондықтан ${cards.length} карточка көрсетілді.`;
+    } else message = `${candidates.length} профильдің ${accepted.length}-і барлық шарттан өтті. Бастапқы бағасы төмен алғашқы 3 профиль көрсетілді.`;
+  }
+  return {
+    status, title, message, query,
+    candidate_count: candidates.length, eligible_count: accepted.length, rejected_count: rejected.length,
+    cards, rejected,
+    reason_counts: Object.entries(REASON_LABELS).filter(([code]) => counts[code]).map(([code, label]) => ({code, label, count: counts[code]})),
+    explanation_mode: 'catalog_only',
+  };
+}
+
+// ИНТЕРФЕЙС ЛОГИКАСЫ
+"use strict";
+
+const form = document.querySelector("#search-form");
+const fields = document.querySelector("#fields");
+const results = document.querySelector("#results");
+const errorBox = document.querySelector("#form-error");
+const submit = document.querySelector("#submit-button");
+let catalog;
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function labelFor(key, value) {
+  return catalog[key].find(option => option.value === value)?.label || value;
+}
+function readForm() {
+  const data = new FormData(form);
+  return {
+    city: data.get("city"), date: data.get("date"), event: data.get("event"), category: data.get("category"),
+    budget: Number(data.get("budget")), language: data.get("language") || null,
+    hours: data.get("hours") === "" ? null : Number(data.get("hours")),
+  };
+}
+function formatDate(value) { return value.split("-").reverse().join("."); }
+function resetRequest() {
+  submit.disabled = false;
+  submit.replaceChildren(document.createTextNode("Сәйкес профильдерді табу "), el("span", "", "→"));
+  results.setAttribute("aria-busy", "false");
+}
+
+function markDirty() {
+  if (!catalog) return;
+  resetRequest();
+  errorBox.hidden = true;
+  const state = el("div", "empty-state dirty-state");
+  state.append(el("h3", "", "Шарттар өзгерді"), el("p", "", "Жаңа шарттарға сәйкес нәтижені көру үшін «Сәйкес профильдерді табу» батырмасын басыңыз."));
+  results.replaceChildren(state);
+}
+form.addEventListener("input", markDirty);
+form.addEventListener("change", markDirty);
+
+function cardView(card, index) {
+  const article = el("article", "profile-card");
+  article.dataset.profileId = card.id;
+  const top = el("div", "card-top");
+  const identity = el("div", "profile-identity");
+  const names = el("div");
+  names.append(el("h3", "", card.name), el("p", "profile-meta", `${card.category} · ${card.city}`));
+  identity.append(el("span", "rank", String(index + 1).padStart(2, "0")), names);
+  const price = el("p", "price", card.price_label);
+  price.append(el("small", "", "Соңғы баға емес"));
+  top.append(identity, price);
+  const attributes = el("div", "card-attributes");
+  attributes.append(el("span", "", card.languages.join(" · ")), el("span", "", card.max_hours === null ? "Алаңда болу ұзақтығы қолданылмайды" : `Алаңда ${card.max_hours} сағатқа дейін`), el("span", "", card.id));
+  const flags = el("div", "flag-row");
+  const meanings = {synthetic: "Жасанды профиль", city_imputed: "Қала дайындау кезінде толтырылған", price_imputed: "Баға дайындау кезінде толтырылған"};
+  for (const [key, enabled] of Object.entries(card.flags)) {
+    const flag = el("span", `flag${enabled ? " active" : ""}`, `${key}: ${enabled ? "иә" : "жоқ"}`);
+    flag.title = `${meanings[key]}: ${enabled ? "иә" : "жоқ"}`;
+    flags.append(flag);
+  }
+  const evidence = el("details", "evidence");
+  const quote = el("blockquote", "", card.evidence);
+  quote.lang = "ru";
+  evidence.append(el("summary", "", "Ерекшеліктің түпнұсқа дерегі (орысша)"), quote);
+  article.append(top, el("p", "explanation", card.explanation), attributes, flags, evidence);
+  return article;
+}
+function render(data) {
+  results.replaceChildren();
+  results.dataset.status = data.status;
+  if (data.status === "matched") {
+    const summary = el("div", "result-summary");
+    const title = el("div", "status-line");
+    title.append(el("span", "status-badge", `${data.cards.length} профиль`), el("h3", "", data.title));
+    summary.append(title, el("p", "summary-text", data.message));
+    const tags = el("div", "query-tags");
+    const q = data.query;
+    [labelFor("cities", q.city), formatDate(q.date), labelFor("events", q.event), ...(q.language ? [labelFor("languages", q.language)] : []), ...(q.hours !== null ? [`${q.hours} сағат`] : [])].forEach(text => tags.append(el("span", "query-tag", text)));
+    summary.append(tags);
+    const cards = el("div", "cards");
+    data.cards.forEach((card, i) => cards.append(cardView(card, i)));
+    results.append(summary, cards);
+  } else {
+    const empty = el("div", "empty-state");
+    empty.append(el("span", "empty-icon", data.status === "no_category" ? "∅" : "—"), el("h3", "", data.title), el("p", "", data.message));
+    results.append(empty);
+  }
+  if (data.rejected_count) {
+    const diagnostics = el("section", "diagnostics");
+    diagnostics.append(el("h4", "", `Неліктен ${data.rejected_count} профиль өтпеді?`));
+    const reasons = el("ul", "reason-list");
+    data.reason_counts.forEach(reason => {
+      const li = el("li", "", reason.label);
+      li.append(el("strong", "", String(reason.count)));
+      reasons.append(li);
+    });
+    diagnostics.append(reasons, el("p", "diagnostic-note", "Сандар қабаттасуы мүмкін: бір профиль бірнеше шарттан өтпеуі мүмкін. Бос емес күндер каталог күнтізбесінен алынды."));
+    const details = el("details", "rejections");
+    details.append(el("summary", "", "Әр профильдің нақты себебін көру"));
+    const list = el("ul");
+    data.rejected.forEach(profile => {
+      const li = el("li");
+      li.append(el("strong", "", profile.name), el("span", "rejection-id", ` (${profile.id})`), document.createTextNode(` — ${profile.reasons.map(reason => reason.detail).join(" ")}`));
+      list.append(li);
+    });
+    details.append(list);
+    diagnostics.append(details);
+    results.append(diagnostics);
+  }
+}
+
+// Барлық есеп осы браузерде орындалады: сервер мен API шақырылмайды.
+function search(query = readForm()) {
+  errorBox.hidden = true;
+  results.setAttribute("aria-busy", "true");
+  try {
+    const data = matchProfiles(DATA.profiles, DATA.facts, query);
+    render(data);
+    return data;
+  } catch (error) {
+    errorBox.textContent = error.message;
+    errorBox.hidden = false;
+    const empty = el("div", "empty-state");
+    empty.append(el("h3", "", "Іріктеу орындалмады"), el("p", "", error.message));
+    results.replaceChildren(empty);
+  } finally {
+    resetRequest();
+  }
+}
+
+form.addEventListener("submit", event => {
+  event.preventDefault();
+  if (form.reportValidity()) void search();
+});
+
+function fillForm(query) {
+  for (const key of ["city", "date", "event", "category", "budget", "language", "hours"]) {
+    form.elements.namedItem(key).value = query[key] ?? "";
+  }
+}
+document.querySelectorAll("[data-example]").forEach(button => button.addEventListener("click", () => {
+  const base = {city: "Алматы", date: "2026-09-23", event: "свадьба", category: "Ведущий", budget: 2000000, language: null, hours: null};
+  if (button.dataset.example === "rare") { base.category = "Флорист"; base.hours = 12; }
+  if (button.dataset.example === "empty") base.budget = 10000;
+  fillForm(base);
+  void search();
+}));
+
+function init() {
+  try {
+    // CSV-дің көшірмесі мен дәлелдер осы HTML файлына бірге салынған.
+    catalog = DATA.options;
+    if (DATA.profiles.length !== catalog.total) throw new Error("Каталог толық емес.");
+    for (const profile of DATA.profiles) {
+      const fact = DATA.facts[profile.id];
+      if (!fact?.kk || !fact?.source || !profile.description.includes(fact.source)) {
+        throw new Error("Профиль ерекшелігінің дәлелі табылмады.");
+      }
+    }
+    for (const [id, key] of [["city", "cities"], ["category", "categories"], ["event", "events"], ["language", "languages"]]) {
+      const select = document.getElementById(id);
+      catalog[key].forEach(item => {
+        const option = el("option", "", item.label);
+        option.value = item.value;
+        select.append(option);
+      });
+    }
+    document.querySelector("#catalog-total").textContent = catalog.total;
+    document.querySelector("#date").min = catalog.min_date;
+    document.querySelector("#date").max = catalog.max_date;
+    document.querySelector("#flag-summary").textContent = `Каталогта ${catalog.total} профиль: ${catalog.flags.synthetic} жасанды; ${catalog.flags.city_imputed} профильде қала, ${catalog.flags.price_imputed} профильде баға дайындау кезінде толтырылған. Белгілер бір профильде қатар кездесуі мүмкін.`;
+    fields.disabled = false;
+    document.querySelectorAll("[data-example]").forEach(button => { button.disabled = false; });
+    search();
+  } catch {
+    results.setAttribute("aria-busy", "false");
+    const state = el("div", "empty-state");
+    state.append(el("h3", "", "Каталог жүктелмеді"), el("p", "", "HTML ішіндегі каталог деректері бүлінген немесе толық емес. Бастапқы файл көшірмесін қайта ашыңыз."));
+    const retry = el("button", "retry-button", "Қайта жүктеу");
+    retry.type = "button";
+    retry.addEventListener("click", () => window.location.reload());
+    state.append(retry);
+    results.replaceChildren(state);
+  }
+}
+void init();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Іс-шараға маман немесе орын таңдаңыз. Нақты каталог, түсінікті себептер, ең көбі үш сәйкес профиль.">
+  <title>Іріктеу — іс-шараңызға лайық профильдер</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232645ed'/%3E%3Cpath d='m9 16 5 5 9-11' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Іріктеу — басты бет"><span class="brand-mark" aria-hidden="true">і</span> іріктеу<span class="brand-dot">.</span></a>
+    <span class="header-note">HackAlem <span class="divider">/</span> Іс-шара каталогы</span>
+    <span class="mode">API кілті қажет емес</span>
+  </header>
+  <main class="workspace">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">ДӘЛЕЛГЕ СҮЙЕНГЕН ТАҢДАУ</p><h1 id="page-title">Іс-шараңызға кім керек?</h1><p class="intro-copy">Шарттарыңызды көрсетіңіз. Каталогтан ең көбі 3 сәйкес профиль табамыз.</p></div>
+      <div class="catalog-stat"><strong id="catalog-total">—</strong><span>профиль<br>бір каталогта</span></div>
+    </section>
+    <div class="layout">
+      <aside class="search-panel">
+        <div class="panel-heading"><span class="section-number">01</span><h2>Іс-шара шарттары</h2></div>
+        <form id="search-form">
+          <fieldset id="fields" disabled>
+            <label for="city">Қала</label><select id="city" name="city" required></select>
+            <label for="date">Іс-шара күні</label><input id="date" name="date" type="date" min="2026-09-23" max="2026-12-31" value="2026-09-23" required aria-describedby="date-help">
+            <p class="field-help" id="date-help">23.09.2026–31.12.2026 аралығы</p>
+            <label for="event">Іс-шара түрі</label><select id="event" name="event" required></select>
+            <label for="category">Маман немесе орын санаты</label><select id="category" name="category" required></select>
+            <label for="budget">Бюджет, теңге</label><input id="budget" name="budget" type="number" min="0" max="9007199254740991" step="1" inputmode="numeric" value="2000000" required aria-describedby="budget-help">
+            <p class="field-help" id="budget-help">Каталогтағы бастапқы бағамен салыстырылады.</p>
+            <div class="optional-heading">Қосымша шарттар <span>Міндетті емес</span></div>
+            <div class="optional-grid"><div><label for="language">Жұмыс тілі</label><select id="language" name="language"><option value="">Кез келген тіл</option></select></div><div><label for="hours">Ұзақтық, сағат</label><input id="hours" name="hours" type="number" min="0.1" step="any" inputmode="decimal" placeholder="Мысалы, 6"></div></div>
+            <button class="search-button" id="submit-button" type="submit">Сәйкес профильдерді табу <span aria-hidden="true">→</span></button>
+          </fieldset>
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+        </form>
+        <div class="examples"><p>Мысалмен тексеру</p><div class="example-buttons"><button type="button" data-example="dense" disabled>Жүргізуші</button><button type="button" data-example="rare" disabled>Флорист</button><button type="button" data-example="empty" disabled>Бос нәтиже</button></div></div>
+      </aside>
+      <section class="results-panel" aria-labelledby="results-label">
+        <div class="results-heading"><div class="panel-heading"><span class="section-number">02</span><h2 id="results-label">Сіздің іріктеуіңіз</h2></div><span class="sort-note">Баға ↑ <span>·</span> тең болса, id ↑</span></div>
+        <div id="results" aria-live="polite" aria-atomic="false" aria-busy="true"><div class="empty-state"><p>Каталог жүктеліп жатыр…</p></div></div>
+        <div class="data-note"><span class="note-icon" aria-hidden="true">i</span><p>Бағалар — бастапқы бағалар. Күннің бос емес деп белгіленбеуі брондауды растамайды. Есімдер каталогта жасырындандырылған.</p></div>
+      </section>
+    </div>
+    <section class="transparency" aria-labelledby="transparency-title"><h2 id="transparency-title">Деректер туралы ашық айтамыз</h2><div class="flag-legend"><p><code>synthetic</code><span>Профиль жасанды түрде құрастырылған.</span></p><p><code>city_imputed</code><span>Қала деректерді дайындау кезінде толтырылған.</span></p><p><code>price_imputed</code><span>Баға деректерді дайындау кезінде толтырылған.</span></p></div><p class="legend-summary" id="flag-summary">Әр карточкада осы үш белгінің мәні көрсетіледі.</p></section>
+  </main>
+  <footer><span>Іріктеу · 2026</span><span>Тек таңдау. Брондау мен төлем қарастырылмаған.</span></footer>
+  <noscript><p class="form-error">Қосымшаны пайдалану үшін браузердегі JavaScript мүмкіндігін қосыңыз.</p></noscript>
+</body>
+</html>
